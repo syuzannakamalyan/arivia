@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Արիvia · Arivia
 
-## Getting Started
+A trip planner for Armenian travellers: plan a trip from start to finish, in Armenian first and English second, with budgets in AMD.
 
-First, run the development server:
+This first version has:
+
+- **Overview page** (`/`): what Arivia offers, a spinning 3D globe with the New 7 Wonders (apricot pins) and the Ancient 7 Wonders (pomegranate pins), a sample trip and FAQ.
+- **Sign up, sign in, forgot password** (`/signup`, `/signin`, `/forgot-password`): email and password, Google, and an Apple ID button that turns on later.
+- **Profile** (`/profile`): name, photo, home city, language, currency, passport country, travel style and visas with type and expiry date.
+- **Armenian / English switch** in the header; the choice is remembered.
+
+## Run it on your computer
+
+You need [Node.js](https://nodejs.org) 20 or newer (on a Mac: download the LTS installer from nodejs.org).
 
 ```bash
+git clone https://github.com/syuzannakamalyan/arivia.git
+cd arivia
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Demo mode and real accounts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Without any setup the app runs in **demo mode**: accounts and profiles are saved only in your browser, so you can try every screen. A dark bar at the top says so.
 
-## Learn More
+To use real accounts, connect a free [Supabase](https://supabase.com) project:
 
-To learn more about Next.js, take a look at the following resources:
+1. Create a project on supabase.com.
+2. Open **SQL Editor**, paste everything from `supabase/schema.sql`, and click **Run**.
+3. Open **Project Settings → API**, copy the project URL and the publishable (anon) key.
+4. Copy `.env.example` to a new file named `.env.local` and paste the two values in.
+5. Restart `npm run dev`. The demo bar disappears.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+For Google sign-in, turn on Google under **Authentication → Providers** in Supabase. Apple ID sign-in needs an Apple developer account first.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Where things are
 
-## Deploy on Vercel
+| What | File |
+| --- | --- |
+| All Armenian and English text | `src/lib/dictionaries.ts` |
+| Brand colors and button styles | `src/app/globals.css` |
+| Overview page | `src/app/page.tsx` |
+| The globe | `src/components/WonderGlobe.tsx` |
+| The 14 wonders and their places | `src/data/wonders.ts` |
+| Sign up / sign in / reset pages | `src/app/signup`, `src/app/signin`, `src/app/forgot-password` |
+| Profile page | `src/app/profile/page.tsx` |
+| Accounts (demo and Supabase) | `src/lib/auth/` |
+| Database setup | `supabase/schema.sql` |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Built with Next.js, Tailwind CSS, globe.gl and Supabase.
