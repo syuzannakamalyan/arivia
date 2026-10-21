@@ -24,6 +24,7 @@ export default function Header() {
         <nav className="hidden items-center gap-6 text-sm font-medium text-navy/80 md:flex">
           <Link href="/#features" className="hover:text-navy">{t.nav.features}</Link>
           <Link href="/#globe" className="hover:text-navy">{t.nav.globe}</Link>
+          <Link href="/visa" className="hover:text-navy">{t.nav.visa}</Link>
           <Link href="/#faq" className="hover:text-navy">{t.nav.faq}</Link>
         </nav>
         <div className="flex items-center gap-2 sm:gap-3">

@@ -5,6 +5,8 @@ import { useEffect, useMemo, useState } from "react";
 import { backend, useAuth, type Profile, type Visa } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
 import { countryName, countryOptions } from "@/data/countries";
+import Link from "next/link";
+import VisaBadge from "@/components/VisaBadge";
 
 const STYLES = ["culture", "food", "nature", "beach", "shopping", "adventure", "family", "budget"] as const;
 const VISA_TYPES = ["schengen", "tourist", "business", "student", "work", "residence", "other"] as const;
@@ -15,6 +17,8 @@ export default function ProfilePage() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const [profile, setProfile] = useState<Profile | null>(null);
+  // Only switch the site language when the person changes it here, not on every save.
+  const [savedLanguage, setSavedLanguage] = useState<Profile["language"] | null>(null);
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const countries = useMemo(() => countryOptions(lang), [lang]);
 
@@ -24,7 +28,11 @@ export default function ProfilePage() {
   }, [loading, user, router]);
 
   useEffect(() => {
-    if (user) backend.getProfile(user).then(setProfile);
+    if (user)
+      backend.getProfile(user).then((p) => {
+        setProfile(p);
+        setSavedLanguage(p.language);
+      });
   }, [user]);
 
   if (!user || !profile) {
@@ -44,7 +52,10 @@ export default function ProfilePage() {
     setStatus("saving");
     try {
       await backend.saveProfile(user!, profile!);
-      if (profile!.language !== lang) setLang(profile!.language);
+      if (profile!.language !== savedLanguage) {
+        setSavedLanguage(profile!.language);
+        if (profile!.language !== lang) setLang(profile!.language);
+      }
       setStatus("saved");
     } catch {
       setStatus("error");
@@ -126,7 +137,10 @@ export default function ProfilePage() {
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
             <h2 className="text-xl font-bold">{t.profile.visas}</h2>
-            <p className="text-sm text-navy/60">{t.profile.visasHint}</p>
+            <p className="text-sm text-navy/60">
+              {t.profile.visasHint}{" "}
+              <Link href="/visa" className="font-semibold text-apricot-dark hover:underline">{t.visa.guideLink} →</Link>
+            </p>
           </div>
           <button
             type="button"
@@ -214,20 +228,6 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
       {children}
     </label>
   );
-}
-
-function VisaBadge({ expiry }: { expiry: string }) {
-  const { t } = useLanguage();
-  const [now] = useState(() => Date.now());
-  if (!expiry) return null;
-  const days = (new Date(expiry).getTime() - now) / 86_400_000;
-  const [label, style] =
-    days < 0
-      ? [t.profile.expired, "bg-pomegranate/15 text-pomegranate"]
-      : days < 60
-        ? [t.profile.expiresSoon, "bg-apricot/20 text-apricot-dark"]
-        : [t.profile.valid, "bg-emerald-100 text-emerald-700"];
-  return <span className={`rounded-full px-3 py-1 text-xs font-semibold whitespace-nowrap ${style}`}>{label}</span>;
 }
 
 // Shrinks the chosen photo to 256px so it stays small enough to save with the profile.
