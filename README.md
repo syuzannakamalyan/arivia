@@ -7,6 +7,7 @@ This first version has no accounts, so anyone can open every page:
 - **Overview page** (`/`): what Arivia offers, a spinning 3D globe with the New 7 Wonders (apricot pins) and the Ancient 7 Wonders (pomegranate pins), a sample trip and FAQ.
 - **Visa guide** (`/visa`): where Armenian passport holders need a visa (link to the MFA lookup), the MFA rules for visiting Armenia, a residence-permit exemption checker and MFA contacts.
 - **AI planner** (`/planner`): destination, dates, travellers, budget in AMD, interests and pace in; a day-by-day plan with costs, a budget split and tips out.
+- **Route planner** (`/routes`): from, to, date and travellers in; flight, train, bus, car or ferry options with time, price estimates in AMD and links to Omio, Google Flights, Rome2rio or Google Maps.
 - **Armenian / English switch** in the header; the choice is remembered.
 
 ## Run it on your computer
@@ -24,7 +25,7 @@ Then open http://localhost:3000.
 
 ## Turn on the AI planner
 
-Without a key, the planner shows a sample plan built from templates. To get real AI plans from Google Gemini (free tier):
+Both planners use the same key. Without it, the route planner shows only search links, and the trip planner shows a sample plan built from templates. To get real AI plans from Google Gemini (free tier):
 
 1. Open [Google AI Studio](https://aistudio.google.com/apikey), sign in with Google and click **Create API key**.
 2. Copy `.env.example` to a new file named `.env.local` and paste the key after `GEMINI_API_KEY=`.
@@ -42,6 +43,9 @@ Without a key, the planner shows a sample plan built from templates. To get real
 | The 14 wonders and their places | `src/data/wonders.ts` |
 | AI planner page | `src/app/planner/page.tsx` |
 | Who writes the plan (Gemini or sample) | `src/lib/planner/` |
+| Route planner page | `src/app/routes/page.tsx` |
+| Where route options come from (Gemini now, Omio later) | `src/lib/routes/` |
+| Gemini API call shared by both planners | `src/lib/ai/gemini.ts` |
 | Visa guide page | `src/app/visa/page.tsx` |
 | Visa rules and MFA links | `src/data/visaRules.ts` |
 
