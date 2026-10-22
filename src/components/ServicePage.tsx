@@ -39,14 +39,15 @@ export default function ServicePage({ service }: { service: ServiceKey }) {
     window.open(first.url, "_blank", "noopener,noreferrer");
   }
 
+  // On computers the fields sit in one row: text fields share the space, dates and people stay compact.
   const text = (label: string, placeholder: string, key: "place" | "to") => (
-    <label key={label} className="block min-w-0">
+    <label key={label} className="block min-w-0 lg:flex-1">
       <span className="mb-1 block text-sm font-semibold">{label}</span>
       <input className="input" value={values[key]} placeholder={placeholder} onChange={set(key)} required />
     </label>
   );
   const date = (label: string, key: "start" | "end", min?: string) => (
-    <label key={label} className="block min-w-0">
+    <label key={label} className="block min-w-0 lg:w-44 lg:flex-none">
       <span className="mb-1 block text-sm font-semibold">{label}</span>
       <input className="input" type="date" value={values[key]} min={min || undefined} onChange={set(key)} required />
     </label>
@@ -60,22 +61,9 @@ export default function ServicePage({ service }: { service: ServiceKey }) {
     port: () => text(f.port, f.portPlaceholder, "place"),
     dates: () => [date(f.start, "start"), date(f.end, "end", values.start)],
     date: () => date(f.date, "start"),
-    tourType: () => (
-      <label key="tourType" className="block min-w-0">
-        <span className="mb-1 block text-sm font-semibold">{f.tourType}</span>
-        <select
-          className="input"
-          value={values.tourType}
-          onChange={(e) => setValues((v) => ({ ...v, tourType: e.target.value as TourType }))}
-        >
-          {TOUR_TYPES.map((type) => (
-            <option key={type} value={type}>{f.tourTypes[type]}</option>
-          ))}
-        </select>
-      </label>
-    ),
+    tourType: () => null, // shown above the other fields, see below
     people: () => (
-      <label key="people" className="block min-w-0">
+      <label key="people" className="block min-w-0 lg:w-28 lg:flex-none">
         <span className="mb-1 block text-sm font-semibold">{f.people}</span>
         <input className="input" type="number" min={1} max={20} value={values.people} onChange={set("people")} />
       </label>
@@ -107,16 +95,35 @@ export default function ServicePage({ service }: { service: ServiceKey }) {
             ))}
           </div>
         )}
-        <form onSubmit={submit} className="grid gap-3 p-5 sm:grid-cols-2 sm:p-6 lg:flex lg:items-end [&>*]:lg:flex-1">
-          {mode.fields.map((field) => fields[field]())}
-          <button className="btn-primary h-[50px] sm:col-span-2 lg:!flex-none">
-            {s.submit} · {first.name}
-          </button>
+        <form onSubmit={submit} className="p-5 sm:p-6">
+          {(mode.fields as ServiceField[]).includes("tourType") && (
+            <label className="mb-4 flex flex-wrap items-center gap-3">
+              <span className="text-sm font-semibold">{f.tourType}</span>
+              <span className="relative">
+                <select
+                  className="input !w-auto appearance-none !py-2 pr-10 text-sm font-semibold"
+                  value={values.tourType}
+                  onChange={(e) => setValues((v) => ({ ...v, tourType: e.target.value as TourType }))}
+                >
+                  {TOUR_TYPES.map((type) => (
+                    <option key={type} value={type}>{f.tourTypes[type]}</option>
+                  ))}
+                </select>
+                <span aria-hidden className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 text-xs text-ink/60">▼</span>
+              </span>
+            </label>
+          )}
+          <div className="grid gap-3 sm:grid-cols-2 lg:flex lg:items-end">
+            {mode.fields.map((field) => fields[field]())}
+            <button className="btn-primary h-[50px] sm:col-span-2 lg:flex-none" title={first.name}>
+              {s.submit} ↗
+            </button>
+          </div>
         </form>
       </div>
 
       <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
-        <span className="text-ink/70">{s.alsoOn}:</span>
+        <span className="text-ink/70">{s.opensOn.replace("{name}", first.name)} {s.alsoOn}:</span>
         {others.map((partner) =>
           complete ? (
             <a key={partner.name} href={partner.url} target="_blank" rel="noopener noreferrer" className="font-semibold text-apricot-dark hover:underline">

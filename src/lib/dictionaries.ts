@@ -36,6 +36,7 @@ const hy = {
   },
   services: {
     submit: "Փնտրել",
+    opensOn: "Որոնումը բացվում է {name}-ում։",
     alsoOn: "Կամ փնտրիր",
     note: "Որոնումը բացվում է գործընկեր կայքում, որտեղ կտեսնես իրական գները և կամրագրես։",
     fields: {
@@ -426,6 +427,7 @@ const en: Dictionary = {
   },
   services: {
     submit: "Search",
+    opensOn: "Search opens {name}.",
     alsoOn: "Or search on",
     note: "The search opens on the partner site, where you see live prices and book.",
     fields: {
