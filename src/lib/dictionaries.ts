@@ -4,38 +4,41 @@
 const hy = {
   nav: {
     planner: "AI պլանավորող",
-    routes: "Երթուղի",
+    routes: "Թռիչքներ և գնացքներ",
+    hotels: "Հյուրանոցներ",
     faq: "Հարցեր",
     visa: "Վիզաներ",
   },
-  hero: {
-    badge: "Ճամփորդությունների պլանավորող հայերեն",
-    title: "Պլանավորիր քո ճամփորդությունը սկզբից մինչև վերջ",
-    subtitle:
-      "Ուղղություն, ամսաթվեր, բյուջե դրամով, օր առ օր պլան և անհրաժեշտ փաստաթղթերի ցանկ։ Ամեն ինչ մեկ տեղում, հայերենով։",
-    cta: "Ընտրել ուղղություն",
-    secondary: "Ինչպես է աշխատում",
-  },
-  features: {
-    title: "Ինչ է տալիս Արիվիան",
-    items: [
-      {
-        title: "AI պլանավորող",
-        text: "Գրիր ուր ես գնում և քո բյուջեն, AI-ը կառաջարկի ինչ տեսնել, որտեղ ուտել և ինչպես տեղաշարժվել։",
-      },
-      {
-        title: "Բյուջե դրամով",
-        text: "Պլանավորված և ծախսված գումարը ըստ կատեգորիաների՝ դրամով և տեղական արժույթով։",
-      },
-      {
-        title: "Վիզաներ և փաստաթղթեր",
-        text: "Իմացիր որտեղ է պետք վիզա հայկական անձնագրով և ինչպես մուտք գործել Հայաստան՝ ԱԳՆ պաշտոնական տվյալներով։",
-      },
-      {
-        title: "Լավագույն առաջարկներ",
-        text: "Հյուրանոցներ, թռիչքներ, ավտոբուսներ և գնացքներ քո բյուջեի սահմաններում։",
-      },
+  theme: { dark: "Միացնել մութ ռեժիմը", light: "Միացնել լուսավոր ռեժիմը" },
+  home: {
+    title: "Ու՞ր ենք գնում",
+    subtitle: "Պլանավորիր ճամփորդությունդ Հայաստանից՝ երթուղի, հյուրանոց, վիզա և օր առ օր պլան մեկ տեղում։",
+    search: "Փնտրել",
+    plannerText: "Գրիր ուղղությունը և ամսաթվերը, իսկ բյուջեն և հետաքրքրությունները կընտրես հաջորդ էջում։",
+    visaText: "Իմացիր, արդյոք վիզա է պետք հայկական անձնագրով, կամ ինչպես այցելել Հայաստան։",
+    visaCta: "Բացել վիզաների ուղեցույցը",
+    popularTitle: "Հայտնի ուղղություններ Երևանից",
+    popularSubtitle: "Ընտրիր քաղաքը և սկսիր AI պլանը։",
+    cities: [
+      { name: "Թբիլիսի", query: "Tbilisi", country: "Վրաստան", emoji: "🍷" },
+      { name: "Դուբայ", query: "Dubai", country: "ԱՄԷ", emoji: "🏙️" },
+      { name: "Փարիզ", query: "Paris", country: "Ֆրանսիա", emoji: "🗼" },
+      { name: "Հռոմ", query: "Rome", country: "Իտալիա", emoji: "🏛️" },
+      { name: "Ստամբուլ", query: "Istanbul", country: "Թուրքիա", emoji: "🕌" },
+      { name: "Դիլիջան", query: "Dilijan", country: "Հայաստան", emoji: "🌲" },
     ],
+  },
+  hotels: {
+    title: "Հյուրանոցներ",
+    subtitle: "Գտիր հյուրանոց քո բյուջեով և ամրագրիր Booking.com-ում կամ Google Hotels-ում։",
+    destination: "Քաղաք կամ հյուրանոց",
+    destinationPlaceholder: "Օրինակ՝ Փարիզ",
+    checkIn: "Մուտք",
+    checkOut: "Ելք",
+    guests: "Հյուրեր",
+    submit: "Փնտրել Booking.com-ում",
+    alsoOn: "Կամ փնտրիր",
+    note: "Որոնումը բացվում է գործընկեր կայքում, որտեղ կտեսնես իրական գները և կամրագրես։",
   },
   routes: {
     title: "Երթուղու պլանավորող",
@@ -107,17 +110,6 @@ const hy = {
     standing: "Պահպանվել է",
     loading: "Մոլորակը բեռնվում է…",
     tap: "Սեղմիր կետի վրա",
-  },
-  sample: {
-    title: "Ճամփորդության օրինակ",
-    trip: "Հռոմ, 4 օր",
-    dates: "12–15 նոյեմբերի · 2 ճամփորդ",
-    budget: "Բյուջե",
-    days: [
-      { day: "Օր 1", text: "Կոլիզեում, Հռոմեական ֆորում, ընթրիք Տրաստևերեում" },
-      { day: "Օր 2", text: "Վատիկանի թանգարաններ, Սուրբ Պետրոսի տաճար" },
-      { day: "Օր 3", text: "Տրևիի շատրվան, Պանթեոն, գնումներ Via del Corso-ում" },
-    ],
   },
   faq: {
     title: "Հաճախ տրվող հարցեր",
@@ -343,38 +335,41 @@ export type Dictionary = typeof hy;
 const en: Dictionary = {
   nav: {
     planner: "AI planner",
-    routes: "Routes",
+    routes: "Flights & trains",
+    hotels: "Hotels",
     faq: "FAQ",
     visa: "Visas",
   },
-  hero: {
-    badge: "A trip planner made for Armenia",
-    title: "Plan your trip from start to finish",
-    subtitle:
-      "Destination, dates, a budget in AMD, a day-by-day plan and a documents checklist. Everything in one place.",
-    cta: "Pick a destination",
-    secondary: "How it works",
-  },
-  features: {
-    title: "What Arivia gives you",
-    items: [
-      {
-        title: "AI planner",
-        text: "Tell it where you're going and your budget, and get ideas for what to see, where to eat and how to get around.",
-      },
-      {
-        title: "Budget in AMD",
-        text: "Planned and spent money by category, in AMD and in the local currency.",
-      },
-      {
-        title: "Visas and documents",
-        text: "See where Armenian passport holders need a visa and how to enter Armenia, from official MFA information.",
-      },
-      {
-        title: "Best offers",
-        text: "Hotels, flights, buses and trains that fit your budget.",
-      },
+  theme: { dark: "Switch to dark mode", light: "Switch to light mode" },
+  home: {
+    title: "Where to next?",
+    subtitle: "Plan your trip from Armenia: routes, hotels, visas and a day-by-day plan in one place.",
+    search: "Search",
+    plannerText: "Enter where and when. You choose the budget and interests on the next page.",
+    visaText: "Check whether you need a visa with an Armenian passport, or how to visit Armenia.",
+    visaCta: "Open the visa guide",
+    popularTitle: "Popular from Yerevan",
+    popularSubtitle: "Pick a city to start an AI plan for it.",
+    cities: [
+      { name: "Tbilisi", query: "Tbilisi", country: "Georgia", emoji: "🍷" },
+      { name: "Dubai", query: "Dubai", country: "UAE", emoji: "🏙️" },
+      { name: "Paris", query: "Paris", country: "France", emoji: "🗼" },
+      { name: "Rome", query: "Rome", country: "Italy", emoji: "🏛️" },
+      { name: "Istanbul", query: "Istanbul", country: "Türkiye", emoji: "🕌" },
+      { name: "Dilijan", query: "Dilijan", country: "Armenia", emoji: "🌲" },
     ],
+  },
+  hotels: {
+    title: "Hotels",
+    subtitle: "Find a hotel within your budget and book it on Booking.com or Google Hotels.",
+    destination: "City or hotel",
+    destinationPlaceholder: "For example, Paris",
+    checkIn: "Check-in",
+    checkOut: "Check-out",
+    guests: "Guests",
+    submit: "Search on Booking.com",
+    alsoOn: "Or search on",
+    note: "The search opens on the partner site, where you see live prices and book.",
   },
   routes: {
     title: "Route planner",
@@ -446,17 +441,6 @@ const en: Dictionary = {
     standing: "Still standing",
     loading: "Loading the planet…",
     tap: "Tap a pin",
-  },
-  sample: {
-    title: "Sample trip",
-    trip: "Rome, 4 days",
-    dates: "12–15 November · 2 travellers",
-    budget: "Budget",
-    days: [
-      { day: "Day 1", text: "Colosseum, Roman Forum, dinner in Trastevere" },
-      { day: "Day 2", text: "Vatican Museums, St. Peter's Basilica" },
-      { day: "Day 3", text: "Trevi Fountain, Pantheon, shopping on Via del Corso" },
-    ],
   },
   faq: {
     title: "Frequently asked questions",

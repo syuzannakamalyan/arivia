@@ -129,7 +129,7 @@ export default function WonderGlobe({ selected, onSelect, lang }: Props) {
       <div ref={containerRef} className="h-full w-full cursor-grab active:cursor-grabbing" />
       {!ready && (
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="h-48 w-48 animate-pulse rounded-full bg-navy/80" />
+          <div className="h-48 w-48 animate-pulse rounded-full bg-panel/80" />
         </div>
       )}
     </div>

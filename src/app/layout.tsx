@@ -9,13 +9,20 @@ const armenian = Noto_Sans_Armenian({ variable: "--font-armenian", subsets: ["ar
 const latin = Noto_Sans({ variable: "--font-latin", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Արիվիա · Arivia",
-  description: "Պլանավորիր քո ճամփորդությունը սկզբից մինչև վերջ։ Plan your trip from start to finish.",
+  title: "Arivia · Trip planner",
+  description: "Plan your trip from Armenia: routes, hotels, visas and a day-by-day plan in one place.",
 };
+
+// Runs before the page paints, so dark mode doesn't flash light first.
+// Uses the visitor's saved choice, otherwise the device setting.
+const themeScript = `try{var t=localStorage.getItem("arivia-theme");if(t==="dark"||(!t&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark")}catch(e){}`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="hy" className={`${armenian.variable} ${latin.variable} h-full antialiased`}>
+    <html lang="en" suppressHydrationWarning className={`${armenian.variable} ${latin.variable} h-full antialiased`}>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className="flex min-h-full flex-col">
         <Providers>
           <Header />

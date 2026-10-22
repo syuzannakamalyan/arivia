@@ -1,14 +1,16 @@
 # Արիvia · Arivia
 
-A trip planner for Armenian travellers: plan a trip from start to finish, in Armenian first and English second, with budgets in AMD.
+A trip planner for Armenian travellers: plan a trip from start to finish, with budgets in AMD. The site is in English for now; the Armenian texts are kept in `src/lib/dictionaries.ts` (switch back with `SITE_LANG` in `src/lib/i18n.tsx`).
 
 This first version has no accounts, so anyone can open every page:
 
-- **Overview page** (`/`): what Arivia offers, a spinning 3D globe with the New 7 Wonders (apricot pins) and the Ancient 7 Wonders (pomegranate pins), a sample trip and FAQ.
+- **Home page** (`/`): a search box with one tab per option (AI planner, flights & trains, hotels, visas) that opens the option's page filled in, popular destinations from Yerevan, a spinning 3D globe with the New 7 Wonders (apricot pins) and the Ancient 7 Wonders (pomegranate pins), and FAQ.
+- **Options bar** in the header (like trip.com): AI planner, Flights & trains, Hotels, Visas.
 - **Visa guide** (`/visa`): where Armenian passport holders need a visa (link to the MFA lookup), the MFA rules for visiting Armenia, a residence-permit exemption checker and MFA contacts.
 - **AI planner** (`/planner`): destination, dates, travellers, budget in AMD, interests and pace in; a day-by-day plan with costs, a budget split and tips out.
-- **Route planner** (`/routes`): from, to, one way or round trip (with a return date) and travellers in; flight, train, bus, car or ferry options with time, price estimates in AMD and links to Omio, Google Flights, Rome2rio or Google Maps.
-- **Armenian / English switch** in the header; the choice is remembered.
+- **Route planner** (`/routes`): from, to, round trip by default (a One way checkbox drops the return date) and travellers in; flight, train, bus, car or ferry options with time, price estimates in AMD and links to Omio, Google Flights, Rome2rio or Google Maps.
+- **Hotels** (`/hotels`): city, dates and guests; opens the search on Booking.com, or Google Hotels.
+- **Light and dark mode**: follows the device setting; the moon / sun button in the header switches it and the choice is remembered.
 
 ## Run it on your computer
 
@@ -37,8 +39,10 @@ Both planners use the same key. Without it, the route planner shows only search 
 | What | File |
 | --- | --- |
 | All Armenian and English text | `src/lib/dictionaries.ts` |
-| Brand colors and button styles | `src/app/globals.css` |
-| Overview page | `src/app/page.tsx` |
+| Brand colors, light and dark mode colors, button styles | `src/app/globals.css` |
+| Header options bar and theme button | `src/components/OptionsBar.tsx`, `src/components/ThemeToggle.tsx` |
+| Home page and its search box | `src/app/page.tsx` |
+| Hotels page and its partner links | `src/app/hotels/page.tsx`, `src/lib/hotels/links.ts` |
 | The globe | `src/components/WonderGlobe.tsx` |
 | The 14 wonders and their places | `src/data/wonders.ts` |
 | AI planner page | `src/app/planner/page.tsx` |

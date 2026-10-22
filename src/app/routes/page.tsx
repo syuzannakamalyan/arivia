@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useCallback, useState } from "react";
+import QueryPrefill from "@/components/QueryPrefill";
 import { useLanguage } from "@/lib/i18n";
 import { bookingLinks, searchLinks } from "@/lib/routes/links";
 import type { RouteRequest, RouteResult } from "@/lib/routes/types";
@@ -24,15 +25,13 @@ export default function RoutesPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
-  async function submit(e: React.FormEvent) {
-    e.preventDefault();
+  async function search(request: Omit<RouteRequest, "lang">) {
     setLoading(true);
     setError(false);
-    const back = oneWay ? undefined : returnDate;
     const res = await fetch("/api/routes", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ from, to, date, returnDate: back, travellers, lang }),
+      body: JSON.stringify({ ...request, lang }),
     }).catch(() => null);
     setLoading(false);
     if (!res?.ok) {
@@ -40,8 +39,32 @@ export default function RoutesPage() {
       return;
     }
     setResult(await res.json());
-    setSearched({ from, to, date, returnDate: back });
+    setSearched(request);
   }
+
+  function submit(e: React.FormEvent) {
+    e.preventDefault();
+    search({ from, to, date, returnDate: oneWay ? undefined : returnDate, travellers });
+  }
+
+  // Coming from the home page search: fill the form, and search right away when it's complete.
+  const prefill = useCallback((params: URLSearchParams) => {
+    const values = {
+      from: params.get("from") ?? "",
+      to: params.get("to") ?? "",
+      date: params.get("date") ?? "",
+      returnDate: params.get("return") ?? undefined,
+      travellers: Number(params.get("travellers")) || 1,
+    };
+    setFrom(values.from);
+    setTo(values.to);
+    setDate(values.date);
+    setReturnDate(values.returnDate ?? "");
+    setOneWay(!values.returnDate);
+    setTravellers(values.travellers);
+    if (values.from && values.to && values.date) search(values);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const duration = (minutes: number) => {
     const h = Math.floor(minutes / 60);
@@ -51,10 +74,13 @@ export default function RoutesPage() {
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6">
+      <Suspense>
+        <QueryPrefill onParams={prefill} />
+      </Suspense>
       <h1 className="text-3xl font-extrabold sm:text-4xl">🧭 {r.title}</h1>
-      <p className="mt-3 max-w-2xl text-lg text-navy/70">{r.subtitle}</p>
+      <p className="mt-3 max-w-2xl text-lg text-ink/70">{r.subtitle}</p>
 
-      <form onSubmit={submit} className="mt-8 rounded-3xl bg-navy p-5 text-cream shadow-sm sm:p-6">
+      <form onSubmit={submit} className="card mt-8 p-5 sm:p-6">
         <label className="mb-4 inline-flex cursor-pointer items-center gap-2 text-sm font-semibold">
           <input type="checkbox" checked={oneWay} onChange={(e) => setOneWay(e.target.checked)} className="h-4 w-4 accent-apricot" />
           {r.oneWay}
@@ -72,7 +98,7 @@ export default function RoutesPage() {
             }}
             aria-label={r.swap}
             title={r.swap}
-            className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-cream/10 text-lg hover:bg-cream/20"
+            className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-muted text-lg hover:bg-line"
           >
             ⇄
           </button>
@@ -103,14 +129,14 @@ export default function RoutesPage() {
 
       <section aria-live="polite" className="mt-8">
         {!result || !searched ? (
-          <div className="flex min-h-48 items-center justify-center rounded-3xl border-2 border-dashed border-sand p-8 text-center text-navy/60">
+          <div className="flex min-h-48 items-center justify-center rounded-3xl border-2 border-dashed border-line p-8 text-center text-ink/60">
             {r.empty}
           </div>
         ) : result.options.length === 0 ? (
           <div className="card p-6">
             <p className="font-semibold">{r.noResults}</p>
             {result.reason && (
-              <p className="mt-1 text-xs text-navy/60">
+              <p className="mt-1 text-xs text-ink/60">
                 {r.reasons[result.reason]}
                 {result.detail && ` (${result.detail})`}
               </p>
@@ -125,21 +151,21 @@ export default function RoutesPage() {
           </div>
         ) : (
           <>
-            <p className="rounded-2xl bg-sand/70 px-4 py-3 text-sm">ℹ️ {r.estimate}</p>
+            <p className="rounded-2xl bg-muted/70 px-4 py-3 text-sm">ℹ️ {r.estimate}</p>
             <ol className="mt-4 space-y-4">
               {result.options.map((option, i) => (
                 <li key={i} className="card p-5">
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>
-                      <span className="rounded-full bg-cream px-3 py-1 text-sm font-semibold">{r.modes[option.mode]}</span>
+                      <span className="rounded-full bg-muted px-3 py-1 text-sm font-semibold">{r.modes[option.mode]}</span>
                       <h2 className="mt-2 text-lg font-bold">{option.title}</h2>
                     </div>
                     <div className="text-right">
                       <div className="text-xl font-extrabold text-apricot-dark">
                         {option.priceAmdMin === option.priceAmdMax ? amd(option.priceAmdMin) : `${amd(option.priceAmdMin)} – ${amd(option.priceAmdMax)}`}
                       </div>
-                      {searched.returnDate && <div className="text-xs font-semibold text-navy/60">{r.roundTripPrice}</div>}
-                      <div className="text-sm text-navy/60">
+                      {searched.returnDate && <div className="text-xs font-semibold text-ink/60">{r.roundTripPrice}</div>}
+                      <div className="text-sm text-ink/60">
                         {duration(option.durationMinutes)} · {option.transfers ? `${r.transfers}: ${option.transfers}` : r.direct}
                       </div>
                     </div>
@@ -147,7 +173,7 @@ export default function RoutesPage() {
                   <ol className="mt-4 space-y-1.5 border-l-2 border-apricot/40 pl-4 text-sm">
                     {option.steps.map((step) => <li key={step}>{step}</li>)}
                   </ol>
-                  <p className="mt-3 text-sm text-navy/70">{option.note}</p>
+                  <p className="mt-3 text-sm text-ink/70">{option.note}</p>
                   <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2">
                     <span className="text-sm font-semibold">{r.book}:</span>
                     {bookingLinks(option.mode, searched).map((link) => (

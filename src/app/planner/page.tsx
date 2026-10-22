@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useCallback, useState } from "react";
+import QueryPrefill from "@/components/QueryPrefill";
 import { useLanguage } from "@/lib/i18n";
 import type { PlanResult } from "@/lib/planner";
 import { INTERESTS, PACES, type Interest, type Pace } from "@/lib/planner/types";
@@ -44,14 +45,24 @@ export default function PlannerPage() {
     setResult(await res.json());
   }
 
+  // Coming from the home page: fill in where and when.
+  const prefill = useCallback((params: URLSearchParams) => {
+    setDestination(params.get("destination") ?? "");
+    setStartDate(params.get("start") ?? "");
+    setEndDate(params.get("end") ?? "");
+  }, []);
+
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6">
+      <Suspense>
+        <QueryPrefill onParams={prefill} />
+      </Suspense>
       <h1 className="text-3xl font-extrabold sm:text-4xl">✨ {p.title}</h1>
-      <p className="mt-3 max-w-2xl text-lg text-navy/70">{p.subtitle}</p>
+      <p className="mt-3 max-w-2xl text-lg text-ink/70">{p.subtitle}</p>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-[380px_1fr] lg:items-start">
         {/* Trip details */}
-        <form onSubmit={submit} className="rounded-3xl bg-navy p-6 text-cream shadow-sm">
+        <form onSubmit={submit} className="card p-6">
           <label className="block">
             <span className="mb-1 block text-sm font-semibold">{p.form.destination}</span>
             <input className="input" value={destination} placeholder={p.form.destinationPlaceholder} onChange={(e) => setDestination(e.target.value)} required />
@@ -88,7 +99,7 @@ export default function PlannerPage() {
                     type="button"
                     aria-pressed={on}
                     onClick={() => toggle(interest)}
-                    className={`rounded-full px-3 py-1.5 text-sm font-medium transition ${on ? "bg-apricot text-white" : "bg-cream/10 text-cream/80 hover:bg-cream/20"}`}
+                    className={`rounded-full px-3 py-1.5 text-sm font-medium transition ${on ? "bg-apricot text-white" : "bg-muted text-ink/75 hover:bg-line"}`}
                   >
                     {p.interests[interest]}
                   </button>
@@ -99,14 +110,14 @@ export default function PlannerPage() {
 
           <fieldset className="mt-5">
             <legend className="mb-2 text-sm font-semibold">{p.form.pace}</legend>
-            <div className="grid grid-cols-3 gap-1 rounded-xl bg-cream/10 p-1">
+            <div className="grid grid-cols-3 gap-1 rounded-xl bg-muted p-1">
               {PACES.map((key) => (
                 <button
                   key={key}
                   type="button"
                   aria-pressed={pace === key}
                   onClick={() => setPace(key)}
-                  className={`rounded-lg py-2 text-sm font-semibold transition ${pace === key ? "bg-cream text-navy" : "text-cream/80 hover:text-cream"}`}
+                  className={`rounded-lg py-2 text-sm font-semibold transition ${pace === key ? "bg-surface text-ink shadow-sm" : "text-ink/70 hover:text-ink"}`}
                 >
                   {p.paces[key]}
                 </button>
@@ -123,7 +134,7 @@ export default function PlannerPage() {
         {/* The plan */}
         <section aria-live="polite">
           {!result ? (
-            <div className="flex min-h-64 items-center justify-center rounded-3xl border-2 border-dashed border-sand p-8 text-center text-navy/60">
+            <div className="flex min-h-64 items-center justify-center rounded-3xl border-2 border-dashed border-line p-8 text-center text-ink/60">
               {p.result.empty}
             </div>
           ) : (
@@ -144,11 +155,11 @@ function Plan({ result }: { result: PlanResult }) {
   return (
     <div>
       {result.source === "sample" && (
-        <p className="rounded-2xl bg-sand/70 px-4 py-3 text-sm">
-          <span className="mr-2 rounded-full bg-navy px-2 py-0.5 text-xs font-semibold text-cream">{p.sampleBadge}</span>
+        <p className="rounded-2xl bg-muted/70 px-4 py-3 text-sm">
+          <span className="mr-2 rounded-full bg-panel px-2 py-0.5 text-xs font-semibold text-on-panel">{p.sampleBadge}</span>
           {p.sampleNote}
           {result.reason && (
-            <span className="mt-1 block text-xs text-navy/60">
+            <span className="mt-1 block text-xs text-ink/60">
               {p.reasons[result.reason]}
               {result.detail && ` (${result.detail})`}
             </span>
@@ -165,7 +176,7 @@ function Plan({ result }: { result: PlanResult }) {
                 <span className="mr-2 inline-flex h-7 w-7 items-center justify-center rounded-full bg-apricot text-sm text-white">{i + 1}</span>
                 {day.title}
               </h2>
-              <span className="text-sm text-navy/60">{showDate(day.date)}</span>
+              <span className="text-sm text-ink/60">{showDate(day.date)}</span>
             </div>
             <ul className="mt-3 space-y-3">
               {day.activities.map((activity) => (
@@ -173,9 +184,9 @@ function Plan({ result }: { result: PlanResult }) {
                   <span className="font-semibold text-apricot-dark">{p.times[activity.time]}</span>
                   <span>
                     <span className="font-semibold">{activity.place}</span>
-                    <span className="block text-navy/70">{activity.description}</span>
+                    <span className="block text-ink/70">{activity.description}</span>
                   </span>
-                  <span className="whitespace-nowrap text-navy/70">{activity.costAmd ? amd(activity.costAmd) : p.result.free}</span>
+                  <span className="whitespace-nowrap text-ink/70">{activity.costAmd ? amd(activity.costAmd) : p.result.free}</span>
                 </li>
               ))}
             </ul>
@@ -184,7 +195,7 @@ function Plan({ result }: { result: PlanResult }) {
       </ol>
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2">
-        <div className="rounded-3xl bg-navy p-5 text-cream">
+        <div className="rounded-3xl bg-panel p-5 text-on-panel">
           <h2 className="font-bold">֏ {p.result.budget}</h2>
           <dl className="mt-3 space-y-2 text-sm">
             {(Object.keys(plan.budget) as (keyof typeof plan.budget)[]).map((key) => (
@@ -193,7 +204,7 @@ function Plan({ result }: { result: PlanResult }) {
                   <dt>{p.budgetParts[key]}</dt>
                   <dd className="font-semibold">{amd(plan.budget[key])}</dd>
                 </div>
-                <div className="mt-1 h-1.5 rounded-full bg-cream/15">
+                <div className="mt-1 h-1.5 rounded-full bg-on-panel/15">
                   <div className="h-1.5 rounded-full bg-apricot" style={{ width: `${total ? (plan.budget[key] / total) * 100 : 0}%` }} />
                 </div>
               </div>
@@ -202,7 +213,7 @@ function Plan({ result }: { result: PlanResult }) {
         </div>
         <div className="card p-5">
           <h2 className="font-bold">💡 {p.result.tips}</h2>
-          <ul className="mt-3 list-disc space-y-1.5 pl-5 text-sm text-navy/75">
+          <ul className="mt-3 list-disc space-y-1.5 pl-5 text-sm text-ink/75">
             {plan.tips.map((tip) => <li key={tip}>{tip}</li>)}
           </ul>
         </div>
