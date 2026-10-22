@@ -23,7 +23,7 @@ export const SERVICES = {
   cars: [
     {
       key: "rental",
-      fields: ["pickUp", "dates"],
+      fields: ["pickUp", "dates", "people"],
       partners: (v) => [
         { name: "Kayak", url: `https://www.kayak.com/cars/${enc(v.place)}/${v.start}/${v.end}` },
         { name: "Rentalcars.com", url: "https://www.rentalcars.com/" },
