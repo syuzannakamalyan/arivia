@@ -3,7 +3,7 @@
 
 const hy = {
   nav: {
-    features: "Հնարավորություններ",
+    planner: "AI պլանավորող",
     globe: "Աշխարհի հրաշալիքներ",
     faq: "Հարցեր",
     visa: "Վիզաներ",
@@ -36,6 +36,36 @@ const hy = {
         text: "Հյուրանոցներ, թռիչքներ, ավտոբուսներ և գնացքներ քո բյուջեի սահմաններում։",
       },
     ],
+  },
+  planner: {
+    title: "AI պլանավորող",
+    subtitle: "Գրիր ուր ես գնում, երբ և ինչ բյուջեով, և ստացիր օր առ օր պլան՝ ինչ տեսնել, որտեղ ուտել և որքան կարժենա։",
+    sampleBadge: "Օրինակային պլան",
+    sampleNote: "AI-ը հիմա հասանելի չէ, ուստի սա ձևանմուշից ստեղծված օրինակ է։ Իրական AI պլանը կհայտնվի, երբ AI-ը միացված լինի։",
+    form: {
+      destination: "Ուր ես գնում",
+      destinationPlaceholder: "Օրինակ՝ Հռոմ",
+      start: "Մեկնում",
+      end: "Վերադարձ",
+      travellers: "Ճամփորդներ",
+      budget: "Բյուջե (֏, ամբողջ ճամփորդության համար)",
+      interests: "Ինչ է քեզ հետաքրքրում",
+      pace: "Տեմպ",
+      submit: "Ստեղծել պլանը",
+      loading: "Պլանը ստեղծվում է…",
+      error: "Լրացրու ուղղությունը, ամսաթվերը (մինչև 14 օր) և բյուջեն։",
+    },
+    interests: { food: "🍽️ Ուտելիք", history: "🏛️ Պատմություն", nature: "🌿 Բնություն", shopping: "🛍️ Գնումներ", nightlife: "🎶 Գիշերային կյանք", kids: "🧸 Երեխաներով" },
+    paces: { relaxed: "Հանգիստ", balanced: "Միջին", packed: "Ակտիվ" },
+    times: { morning: "Առավոտ", afternoon: "Կեսօր", evening: "Երեկո" },
+    result: { budget: "Բյուջեի բաշխում", tips: "Խորհուրդներ", free: "Անվճար", empty: "Լրացրու ձևը, և պլանը կհայտնվի այստեղ։" },
+    budgetParts: { transport: "Տրանսպորտ", stay: "Կացություն", food: "Սնունդ", activities: "Ժամանց" },
+    teaser: {
+      title: "AI պլանավորող",
+      text: "Մի քանի վայրկյանում ստացիր ճամփորդության պլան՝ ըստ քո բյուջեի և հետաքրքրությունների։",
+      steps: ["Գրիր ուղղությունը և ամսաթվերը", "Նշիր բյուջեն դրամով և հետաքրքրությունները", "Ստացիր օր առ օր պլան"],
+      cta: "Պլանավորել ճամփորդությունը",
+    },
   },
   globe: {
     title: "Աշխարհի 14 հրաշալիքները",
@@ -282,7 +312,7 @@ export type Dictionary = typeof hy;
 
 const en: Dictionary = {
   nav: {
-    features: "Features",
+    planner: "AI planner",
     globe: "World wonders",
     faq: "FAQ",
     visa: "Visas",
@@ -315,6 +345,36 @@ const en: Dictionary = {
         text: "Hotels, flights, buses and trains that fit your budget.",
       },
     ],
+  },
+  planner: {
+    title: "AI planner",
+    subtitle: "Tell us where you're going, when and on what budget, and get a day-by-day plan: what to see, where to eat and what it costs.",
+    sampleBadge: "Sample plan",
+    sampleNote: "AI isn't available right now, so this is a sample built from templates. Real AI plans appear once AI is connected.",
+    form: {
+      destination: "Where are you going",
+      destinationPlaceholder: "For example, Rome",
+      start: "Leaving",
+      end: "Coming back",
+      travellers: "Travellers",
+      budget: "Budget (AMD, whole trip)",
+      interests: "What are you into",
+      pace: "Pace",
+      submit: "Create my plan",
+      loading: "Creating your plan…",
+      error: "Fill in the destination, dates (up to 14 days) and budget.",
+    },
+    interests: { food: "🍽️ Food", history: "🏛️ History", nature: "🌿 Nature", shopping: "🛍️ Shopping", nightlife: "🎶 Nightlife", kids: "🧸 With kids" },
+    paces: { relaxed: "Relaxed", balanced: "Balanced", packed: "Packed" },
+    times: { morning: "Morning", afternoon: "Afternoon", evening: "Evening" },
+    result: { budget: "Budget split", tips: "Tips", free: "Free", empty: "Fill in the form and your plan appears here." },
+    budgetParts: { transport: "Transport", stay: "Stay", food: "Food", activities: "Activities" },
+    teaser: {
+      title: "AI planner",
+      text: "Get a trip plan in seconds, built around your budget and interests.",
+      steps: ["Enter your destination and dates", "Set your budget in AMD and your interests", "Get a day-by-day plan"],
+      cta: "Plan my trip",
+    },
   },
   globe: {
     title: "The 14 wonders of the world",

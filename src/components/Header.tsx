@@ -13,7 +13,7 @@ export default function Header() {
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
         <Logo />
         <nav className="hidden items-center gap-6 text-sm font-medium text-navy/80 md:flex">
-          <Link href="/#features" className="hover:text-navy">{t.nav.features}</Link>
+          <Link href="/planner" className="hover:text-navy">{t.nav.planner}</Link>
           <Link href="/#globe" className="hover:text-navy">{t.nav.globe}</Link>
           <Link href="/#faq" className="hover:text-navy">{t.nav.faq}</Link>
         </nav>

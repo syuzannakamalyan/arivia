@@ -9,8 +9,6 @@ import { WONDERS, type Wonder } from "@/data/wonders";
 // The globe uses WebGL, so it only loads in the browser.
 const WonderGlobe = dynamic(() => import("@/components/WonderGlobe"), { ssr: false });
 
-const FEATURE_ICONS = ["✨", "֏", "🛂", "🏨"];
-
 export default function Home() {
   const { t, lang } = useLanguage();
   const [selected, setSelected] = useState<Wonder | null>(null);
@@ -28,7 +26,7 @@ export default function Home() {
             <p className="mt-4 max-w-xl text-lg text-navy/70">{t.hero.subtitle}</p>
             <div className="mt-8 flex flex-wrap gap-3">
               <a href="#wonders" className="btn-primary">{t.hero.cta}</a>
-              <a href="#features" className="btn-secondary">{t.hero.secondary}</a>
+              <a href="#planner" className="btn-secondary">{t.hero.secondary}</a>
             </div>
           </div>
 
@@ -71,21 +69,22 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Benefits */}
-      <section id="features" className="bg-white py-16">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <h2 className="text-3xl font-bold">{t.features.title}</h2>
-          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {t.features.items.map((item, i) => (
-              <div key={item.title} className="rounded-3xl bg-cream p-6">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-apricot text-2xl text-white">
-                  {FEATURE_ICONS[i]}
-                </div>
-                <h3 className="mt-4 text-lg font-bold">{item.title}</h3>
-                <p className="mt-2 text-navy/70">{item.text}</p>
-              </div>
-            ))}
+      {/* AI planner */}
+      <section id="planner" className="scroll-mt-20 bg-white py-16">
+        <div className="mx-auto grid max-w-6xl gap-8 px-4 sm:px-6 lg:grid-cols-2 lg:items-center">
+          <div>
+            <h2 className="text-3xl font-bold">✨ {t.planner.teaser.title}</h2>
+            <p className="mt-3 text-lg text-navy/70">{t.planner.teaser.text}</p>
+            <Link href="/planner" className="btn-primary mt-6">{t.planner.teaser.cta}</Link>
           </div>
+          <ol className="space-y-3">
+            {t.planner.teaser.steps.map((step, i) => (
+              <li key={step} className="flex items-center gap-4 rounded-3xl bg-cream p-5">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-apricot font-bold text-white">{i + 1}</span>
+                <span className="font-semibold">{step}</span>
+              </li>
+            ))}
+          </ol>
         </div>
       </section>
 
