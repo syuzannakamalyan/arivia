@@ -6,7 +6,7 @@ This first version has no accounts, so anyone can open every page:
 
 - **Home page** (`/`): a search box with one tab per option (AI planner, flights & trains, hotels, visas) that opens the option's page filled in, popular destinations from Yerevan, a spinning 3D globe with the New 7 Wonders (apricot pins) and the Ancient 7 Wonders (pomegranate pins), and FAQ.
 - **Options menu** on the left, like trip.com (a sideways row under the header on phones): AI planner, Hotels, Flights & trains, Cars, Attractions & tours, Cruises, eSIM, Visas.
-- **Cars, tours, cruises and eSIM** (`/cars`, `/tours`, `/cruises`, `/esim`): a short form that opens the search on partner sites (Kayak, Kiwitaxi, GetYourGuide, Viator, Airalo and others). Cars has two tabs, car rental and airport transfer, and shows a list from Gemini (car classes with price per day, or ways to get from the airport with price per ride, and the companies that offer them) with links to compare and book. Attractions & tours has a dropdown for all tours, private tours or group tours.
+- **Cars, tours, cruises and eSIM** (`/cars`, `/tours`, `/cruises`, `/esim`): a short form that opens the search on partner sites (Kayak, Kiwitaxi, GetYourGuide, Viator, Airalo and others). Cars has two tabs, car rental and airport transfer, and shows a list from Gemini (car classes with price per day, or ways to get from the airport with price per ride, and the companies that offer them) with links to compare and book. Attractions & tours (with a dropdown for all, private or group tours; the end date is optional) and Cruises also show a Gemini list of options with price per person and links to book each one (GetYourGuide and Viator for tours, Google and Cruise Critic for cruises).
 - **Visa guide** (`/visa`): where Armenian passport holders need a visa (link to the MFA lookup), the MFA rules for visiting Armenia, a residence-permit exemption checker and MFA contacts.
 - **AI planner** (`/planner`): destination, dates, travellers, budget in AMD, interests and pace in; a day-by-day plan with costs, a budget split and tips out.
 - **Route planner** (`/routes`): from, to, round trip by default (a One way checkbox drops the return date) and travellers in; flight, train, bus, car or ferry options with time, price estimates in AMD and links to Omio, Google Flights, Rome2rio or Google Maps.
@@ -43,6 +43,7 @@ The planners and the hotel list use the same key. Without it, the route planner 
 | Brand colors, light and dark mode colors, button styles | `src/app/globals.css` |
 | Options menu and theme button | `src/components/OptionsBar.tsx`, `src/components/ThemeToggle.tsx` |
 | Cars, tours, cruises and eSIM pages and their partner links | `src/components/ServicePage.tsx`, `src/data/services.ts` |
+| Tours and cruises options (Gemini now, a GetYourGuide or Viator partner API later) | `src/lib/offers/`, `src/app/api/offers/route.ts` |
 | Cars page and where its options come from (Gemini now, a car rental or transfer partner API later) | `src/app/cars/page.tsx`, `src/lib/cars/` |
 | Home page and its search box | `src/app/page.tsx` |
 | Hotels page | `src/app/hotels/page.tsx` |

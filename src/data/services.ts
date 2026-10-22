@@ -11,7 +11,10 @@ export type PartnerLink = { name: string; url: string };
 export type ServiceMode = {
   key: string;
   fields: ServiceField[];
+  endOptional?: boolean; // the "Until" date can be left empty
   partners: (v: ServiceValues) => PartnerLink[];
+  // Pages with an AI options list: the booking links for one option from that list.
+  optionLinks?: (title: string, v: ServiceValues) => PartnerLink[];
 };
 
 const enc = encodeURIComponent;
@@ -44,10 +47,12 @@ export const SERVICES = {
     {
       key: "default",
       fields: ["destination", "tourType", "dates", "people"],
+      endOptional: true,
       partners: (v) => {
         const q = { all: v.place, private: `private tour ${v.place}`, group: `group tour ${v.place}` }[v.tourType];
         return [getYourGuide(q), viator(q)];
       },
+      optionLinks: (title, v) => [getYourGuide(`${title} ${v.place}`), viator(`${title} ${v.place}`)],
     },
   ],
   cruises: [
@@ -56,6 +61,10 @@ export const SERVICES = {
       fields: ["port", "dates", "people"],
       partners: (v) => [
         { name: "Google", url: google(`cruises from ${v.place} ${v.start}`) },
+        { name: "Cruise Critic", url: "https://www.cruisecritic.com/" },
+      ],
+      optionLinks: (title, v) => [
+        { name: "Google", url: google(`${title} cruise ${v.start}`) },
         { name: "Cruise Critic", url: "https://www.cruisecritic.com/" },
       ],
     },
