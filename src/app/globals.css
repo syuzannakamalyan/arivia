@@ -1,26 +1,34 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Arivia brand colors (from the Stitch design direction) */
+@theme {
+  --color-apricot: #f28c28;
+  --color-apricot-dark: #d9741a;
+  --color-pomegranate: #b8323a;
+  --color-navy: #14213d;
+  --color-navy-light: #24345c;
+  --color-cream: #fff8f0;
+  --color-sand: #f5e9da;
+  --font-sans: var(--font-armenian), var(--font-latin), system-ui, sans-serif;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-cream);
+  color: var(--color-navy);
+}
+
+.input {
+  @apply w-full rounded-xl border border-sand bg-white px-4 py-3 text-navy outline-none transition placeholder:text-navy/40 focus:border-apricot focus:ring-2 focus:ring-apricot/30;
+}
+
+.btn-primary {
+  @apply inline-flex items-center justify-center gap-2 rounded-full bg-apricot px-6 py-3 font-semibold text-white shadow-sm transition hover:bg-apricot-dark disabled:opacity-60;
+}
+
+.btn-secondary {
+  @apply inline-flex items-center justify-center gap-2 rounded-full border border-navy/15 bg-white px-6 py-3 font-semibold text-navy transition hover:border-navy/40 disabled:opacity-60;
+}
+
+.card {
+  @apply rounded-3xl border border-sand bg-white shadow-sm;
 }
