@@ -11,8 +11,8 @@ const SKIP = [404, 429, 500, 503];
 const DEADLINE_MS = 45_000; // stay well under the API routes' 60 s limit
 
 // Flash models "think" before answering by default, which makes answers several times slower.
-// These lists don't need it, so thinking is turned off. If a model rejects the setting (400),
-// the same model is asked again without it.
+// These lists don't need it, so thinking is turned off. If a model rejects the request (400),
+// it is asked again without the setting, and if it still refuses, the next model is tried.
 const NO_THINKING = { thinkingConfig: { thinkingBudget: 0 } };
 
 // The same question within an hour gets the saved answer instead of a new AI call.
@@ -49,12 +49,12 @@ export async function callGeminiJson(prompt: string, schema: object, apiKey: str
         body: body(fast),
         signal: AbortSignal.timeout(left),
       });
-      if (res.status === 400 && fast && /thinking/i.test(await res.clone().text())) {
-        fast = false; // this model doesn't take the setting: ask again without it
+      if (res.status === 400 && fast) {
+        fast = false; // the model may not take the no-thinking setting: ask again without it
         continue;
       }
-      if (!SKIP.includes(res.status)) break attempts;
-      if (res.status === 404) break; // retired: go straight to the next model
+      if (!SKIP.includes(res.status) && res.status !== 400) break attempts;
+      if (res.status === 404 || res.status === 400) break; // retired, or rejects the request: try the next model
       await new Promise((resolve) => setTimeout(resolve, 1_500));
     }
   }
