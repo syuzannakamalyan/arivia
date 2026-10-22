@@ -125,7 +125,9 @@ export default function Home() {
   );
 }
 
-type Tab = (typeof OPTIONS)[number]["key"];
+// The options that can be searched right from the home page.
+const SEARCH_TABS = OPTIONS.filter((option) => ["planner", "routes", "hotels", "visa"].includes(option.key));
+type Tab = "planner" | "routes" | "hotels" | "visa";
 
 // The search box with one tab per option. Each tab sends its values to that option's page.
 function SearchBox() {
@@ -166,12 +168,12 @@ function SearchBox() {
   return (
     <div className="card mt-8 overflow-hidden">
       <div role="tablist" className="no-scrollbar flex gap-1 overflow-x-auto border-b border-line px-3 pt-3">
-        {OPTIONS.map((option) => (
+        {SEARCH_TABS.map((option) => (
           <button
             key={option.key}
             role="tab"
             aria-selected={tab === option.key}
-            onClick={() => setTab(option.key)}
+            onClick={() => setTab(option.key as Tab)}
             className={`flex shrink-0 items-center gap-1.5 border-b-2 px-4 py-2.5 text-sm font-semibold transition ${
               tab === option.key ? "border-apricot text-apricot-dark" : "border-transparent text-ink/70 hover:text-ink"
             }`}

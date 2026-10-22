@@ -4,6 +4,7 @@ import "./globals.css";
 import Providers from "@/components/Providers";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import OptionsBar from "@/components/OptionsBar";
 
 const armenian = Noto_Sans_Armenian({ variable: "--font-armenian", subsets: ["armenian"] });
 const latin = Noto_Sans({ variable: "--font-latin", subsets: ["latin"] });
@@ -26,7 +27,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="flex min-h-full flex-col">
         <Providers>
           <Header />
-          <main className="flex flex-1 flex-col">{children}</main>
+          <div className="flex flex-1">
+            {/* Options on the left, like trip.com */}
+            <aside className="sticky top-[61px] hidden self-start h-[calc(100vh-61px)] w-60 shrink-0 overflow-y-auto border-r border-line bg-surface p-3 lg:block">
+              <OptionsBar vertical />
+            </aside>
+            <main className="flex min-w-0 flex-1 flex-col">{children}</main>
+          </div>
           <Footer />
         </Providers>
       </body>
