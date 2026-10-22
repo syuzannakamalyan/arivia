@@ -4,7 +4,9 @@ import { tripLength, type TripPlan, type TripRequest } from "./types";
 // (and in Vercel → Project → Settings → Environment Variables).
 // GEMINI_MODEL can override the model.
 
-const DEFAULT_MODEL = "gemini-2.5-flash";
+// Tried in order; a model Google has retired (404) falls through to the next.
+// "gemini-flash-latest" always points at Google's current Flash model.
+const MODELS = ["gemini-flash-latest", "gemini-3.8-flash"];
 
 // The JSON shape Gemini must return, in Gemini's schema format. Matches TripPlan.
 const PLAN_SCHEMA = {
@@ -85,19 +87,23 @@ function isPlan(value: unknown, days: number): value is TripPlan {
 }
 
 export async function generateGeminiPlan(request: TripRequest, apiKey: string): Promise<TripPlan> {
-  const model = process.env.GEMINI_MODEL || DEFAULT_MODEL;
-  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
-    body: JSON.stringify({
-      contents: [{ role: "user", parts: [{ text: prompt(request) }] }],
-      generationConfig: { responseMimeType: "application/json", responseSchema: PLAN_SCHEMA, temperature: 0.7 },
-    }),
-    signal: AbortSignal.timeout(45_000),
-  });
-  if (!res.ok) {
-    const error = await res.json().catch(() => null);
-    throw new Error(`Gemini ${res.status}: ${error?.error?.message ?? res.statusText}`);
+  const models = process.env.GEMINI_MODEL ? [process.env.GEMINI_MODEL, ...MODELS] : MODELS;
+  let res: Response | undefined;
+  for (const model of models) {
+    res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
+      body: JSON.stringify({
+        contents: [{ role: "user", parts: [{ text: prompt(request) }] }],
+        generationConfig: { responseMimeType: "application/json", responseSchema: PLAN_SCHEMA, temperature: 0.7 },
+      }),
+      signal: AbortSignal.timeout(45_000),
+    });
+    if (res.status !== 404) break;
+  }
+  if (!res?.ok) {
+    const error = await res?.json().catch(() => null);
+    throw new Error(`Gemini ${res?.status}: ${error?.error?.message ?? res?.statusText}`);
   }
 
   const data = await res.json();
