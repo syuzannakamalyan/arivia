@@ -8,10 +8,10 @@ export const maxDuration = 60;
 // POST /api/offers with an OfferRequest (tours or cruises), returns an OfferResult.
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => null)) as Partial<OfferRequest> | null;
-  if (!body || (body.kind !== "tours" && body.kind !== "cruises")) return Response.json({ error: "invalid" }, { status: 400 });
+  if (!body || !["tours", "cruises", "esim"].includes(body.kind as string)) return Response.json({ error: "invalid" }, { status: 400 });
 
   const request: OfferRequest = {
-    kind: body.kind,
+    kind: body.kind!,
     place: String(body.place ?? "").trim().slice(0, 80),
     start: String(body.start ?? ""),
     end: String(body.end ?? ""),

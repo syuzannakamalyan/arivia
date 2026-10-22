@@ -1,7 +1,7 @@
 import { callGeminiJson } from "@/lib/ai/gemini";
 import type { OfferOption, OfferRequest } from "./types";
 
-// Asks Gemini for typical attractions and tours at a destination, or cruises from a port, with prices.
+// Asks Gemini for typical attractions and tours at a destination, cruises from a port, or eSIM plans for a country, with prices.
 
 const OFFERS_SCHEMA = {
   type: "OBJECT",
@@ -31,8 +31,25 @@ const TOUR_KINDS = {
   group: "small or large group tours only (joined with other travellers)",
 };
 
+// Well-known travel eSIM brands to choose from; the AI only lists ones that cover the country.
+export const ESIM_BRANDS = ["Airalo", "VeloeSIM", "Holafly", "Saily", "Yesim", "Nomad", "Ubigi"];
+
 function prompt({ kind, place, start, end, people, tourType, lang }: OfferRequest) {
   const language = lang === "hy" ? "Eastern Armenian (Armenian script)" : "English";
+  if (kind === "esim") {
+    const days = Math.round((Date.parse(end) - Date.parse(start)) / 86_400_000) + 1;
+    return `You are Arivia, a travel planner for people living in Armenia.
+List 5 or 6 travel eSIM data plans for a ${days}-day trip to "${place}" (${start} to ${end}).
+- Use only these brands, and only ones that really sell plans for that country: ${ESIM_BRANDS.join(", ")}.
+- title is the brand and the plan, e.g. "Airalo: 5 GB, 30 days". Put the brand name first, exactly as written above.
+- details has 2 to 4 short facts: data amount, validity in days, hotspot allowed or not, local network.
+- priceAmdMin and priceAmdMax are the typical price range for the whole plan in Armenian dram.
+- providers has exactly one item: the brand name, exactly as written above.
+- description is one sentence on who it suits (light use, heavy use, unlimited) and any tip (install before you fly...).
+- Mix cheap small plans and bigger or unlimited ones, and make sure every plan lasts at least ${days} days.
+- These are estimates; never claim live prices. Never invent brands or plans.
+- Write every text field in ${language}.`;
+  }
   const task =
     kind === "tours"
       ? `List 6 popular things to book in "${place}" ${end ? `between ${start} and ${end}` : `on or after ${start}`} for ${people} people: ${TOUR_KINDS[tourType]}.

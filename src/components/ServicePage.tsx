@@ -250,7 +250,7 @@ function OptionsList({ result, searched, loading, mode }: { result: OfferResult 
                     <div className="font-extrabold text-apricot-dark">
                       {option.priceAmdMin === option.priceAmdMax ? amd(option.priceAmdMin) : `${amd(option.priceAmdMin)} – ${amd(option.priceAmdMax)}`}
                     </div>
-                    <div className="text-xs text-ink/60">{r.perPerson}</div>
+                    <div className="text-xs text-ink/60">{r[mode.priceNote ?? "perPerson"]}</div>
                   </div>
                 </div>
                 <p className="mt-2 text-sm text-ink/80">{option.description}</p>
@@ -268,7 +268,7 @@ function OptionsList({ result, searched, loading, mode }: { result: OfferResult 
                 )}
                 <div className="mt-auto flex flex-wrap items-center gap-x-4 gap-y-2 pt-4">
                   <span className="text-sm font-semibold">{r.book}:</span>
-                  {mode.optionLinks!(option.title, searched).map((l) => link(l, "text-sm font-semibold text-apricot-dark hover:underline"))}
+                  {mode.optionLinks!(option, searched).map((l) => link(l, "text-sm font-semibold text-apricot-dark hover:underline"))}
                 </div>
               </li>
             ))}
