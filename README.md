@@ -7,7 +7,7 @@ This first version has no accounts, so anyone can open every page:
 - **Overview page** (`/`): what Arivia offers, a spinning 3D globe with the New 7 Wonders (apricot pins) and the Ancient 7 Wonders (pomegranate pins), a sample trip and FAQ.
 - **Visa guide** (`/visa`): where Armenian passport holders need a visa (link to the MFA lookup), the MFA rules for visiting Armenia, a residence-permit exemption checker and MFA contacts.
 - **AI planner** (`/planner`): destination, dates, travellers, budget in AMD, interests and pace in; a day-by-day plan with costs, a budget split and tips out.
-- **Route planner** (`/routes`): from, to, date and travellers in; flight, train, bus, car or ferry options with time, price estimates in AMD and links to Omio, Google Flights, Rome2rio or Google Maps.
+- **Route planner** (`/routes`): from, to, one way or round trip (with a return date) and travellers in; flight, train, bus, car or ferry options with time, price estimates in AMD and links to Omio, Google Flights, Rome2rio or Google Maps.
 - **Armenian / English switch** in the header; the choice is remembered.
 
 ## Run it on your computer
