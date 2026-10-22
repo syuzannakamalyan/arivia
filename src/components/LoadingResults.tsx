@@ -8,7 +8,7 @@ export default function LoadingResults({ cards = 3 }: { cards?: number }) {
   return (
     <div role="status">
       <p className="flex items-center gap-2 text-sm font-semibold text-ink/70">
-        <span className="h-4 w-4 animate-spin rounded-full border-2 border-apricot border-t-transparent" />
+        <span className="h-4 w-4 animate-spin rounded-full border-2 border-brand border-t-transparent" />
         {t.loadingNote}
       </p>
       <ul className="mt-4 space-y-4" aria-hidden>

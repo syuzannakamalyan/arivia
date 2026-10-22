@@ -1,5 +1,7 @@
 "use client";
 
+import { Info } from "lucide-react";
+import { PageTitle } from "@/components/OptionsBar";
 import { useState } from "react";
 import LoadingResults from "@/components/LoadingResults";
 import { useLanguage } from "@/lib/i18n";
@@ -75,7 +77,7 @@ export default function CarsPage() {
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6">
-      <h1 className="text-3xl font-extrabold sm:text-4xl">🚗 {c.title}</h1>
+      <PageTitle option="cars">{c.title}</PageTitle>
       <p className="mt-3 max-w-2xl text-lg text-ink/70">{c.subtitle}</p>
 
       <div className="card mt-8 overflow-hidden">
@@ -87,7 +89,7 @@ export default function CarsPage() {
               aria-selected={m === mode}
               onClick={() => switchMode(m)}
               className={`border-b-2 px-4 py-2.5 text-sm font-semibold transition ${
-                m === mode ? "border-apricot text-apricot-dark" : "border-transparent text-ink/70 hover:text-ink"
+                m === mode ? "border-brand text-brand-strong" : "border-transparent text-ink/70 hover:text-ink"
               }`}
             >
               {c.modes[m]}
@@ -146,14 +148,14 @@ export default function CarsPage() {
           </div>
         ) : (
           <>
-            <p className="rounded-2xl bg-muted px-4 py-3 text-sm">ℹ️ {c.estimate}</p>
+            <p className="rounded-2xl bg-muted px-4 py-3 text-sm"><Info aria-hidden className="mr-1.5 inline h-4 w-4 -translate-y-px text-brand-strong" />{c.estimate}</p>
             <ul className="mt-4 grid gap-4 md:grid-cols-2">
               {result.options.map((option) => (
                 <li key={option.title} className="card flex flex-col p-5">
                   <div className="flex items-start justify-between gap-3">
                     <h2 className="min-w-0 text-lg font-bold">{option.title}</h2>
                     <div className="shrink-0 text-right">
-                      <div className="font-extrabold text-apricot-dark">
+                      <div className="font-extrabold text-brand-strong">
                         {option.priceAmdMin === option.priceAmdMax ? amd(option.priceAmdMin) : `${amd(option.priceAmdMin)} – ${amd(option.priceAmdMax)}`}
                       </div>
                       <div className="text-xs text-ink/60">{searched.mode === "rental" ? c.perDay : c.perRide}</div>
@@ -173,7 +175,7 @@ export default function CarsPage() {
                   <div className="mt-auto flex flex-wrap items-center gap-x-4 gap-y-2 pt-4">
                     <span className="text-sm font-semibold">{c.book}:</span>
                     {links(searched).map((link) => (
-                      <a key={link.name} href={link.url} target="_blank" rel="noopener noreferrer" className="text-sm font-semibold text-apricot-dark hover:underline">
+                      <a key={link.name} href={link.url} target="_blank" rel="noopener noreferrer" className="text-sm font-semibold text-brand-strong hover:underline">
                         {link.name} ↗
                       </a>
                     ))}

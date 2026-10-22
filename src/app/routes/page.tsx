@@ -1,5 +1,7 @@
 "use client";
 
+import { Info } from "lucide-react";
+import { PageTitle } from "@/components/OptionsBar";
 import { Suspense, useCallback, useState } from "react";
 import LoadingResults from "@/components/LoadingResults";
 import QueryPrefill from "@/components/QueryPrefill";
@@ -79,12 +81,12 @@ export default function RoutesPage() {
       <Suspense>
         <QueryPrefill onParams={prefill} />
       </Suspense>
-      <h1 className="text-3xl font-extrabold sm:text-4xl">🧭 {r.title}</h1>
+      <PageTitle option="routes">{r.title}</PageTitle>
       <p className="mt-3 max-w-2xl text-lg text-ink/70">{r.subtitle}</p>
 
       <form onSubmit={submit} className="card mt-8 p-5 sm:p-6">
         <label className="mb-4 inline-flex cursor-pointer items-center gap-2 text-sm font-semibold">
-          <input type="checkbox" checked={oneWay} onChange={(e) => setOneWay(e.target.checked)} className="h-4 w-4 accent-apricot" />
+          <input type="checkbox" checked={oneWay} onChange={(e) => setOneWay(e.target.checked)} className="h-4 w-4 accent-brand" />
           {r.oneWay}
         </label>
         <div className={`grid gap-3 lg:items-end ${!oneWay ? "lg:grid-cols-[1fr_auto_1fr_160px_160px_110px_auto]" : "lg:grid-cols-[1fr_auto_1fr_180px_120px_auto]"}`}>
@@ -159,7 +161,7 @@ export default function RoutesPage() {
           </div>
         ) : (
           <>
-            <p className="rounded-2xl bg-muted/70 px-4 py-3 text-sm">ℹ️ {r.estimate}</p>
+            <p className="rounded-2xl bg-muted/70 px-4 py-3 text-sm"><Info aria-hidden className="mr-1.5 inline h-4 w-4 -translate-y-px text-brand-strong" />{r.estimate}</p>
             <ol className="mt-4 space-y-4">
               {result.options.map((option, i) => (
                 <li key={i} className="card p-5">
@@ -169,7 +171,7 @@ export default function RoutesPage() {
                       <h2 className="mt-2 text-lg font-bold">{option.title}</h2>
                     </div>
                     <div className="text-right">
-                      <div className="text-xl font-extrabold text-apricot-dark">
+                      <div className="text-xl font-extrabold text-brand-strong">
                         {option.priceAmdMin === option.priceAmdMax ? amd(option.priceAmdMin) : `${amd(option.priceAmdMin)} – ${amd(option.priceAmdMax)}`}
                       </div>
                       {searched.returnDate && <div className="text-xs font-semibold text-ink/60">{r.roundTripPrice}</div>}
@@ -178,14 +180,14 @@ export default function RoutesPage() {
                       </div>
                     </div>
                   </div>
-                  <ol className="mt-4 space-y-1.5 border-l-2 border-apricot/40 pl-4 text-sm">
+                  <ol className="mt-4 space-y-1.5 border-l-2 border-brand/40 pl-4 text-sm">
                     {option.steps.map((step) => <li key={step}>{step}</li>)}
                   </ol>
                   <p className="mt-3 text-sm text-ink/70">{option.note}</p>
                   <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2">
                     <span className="text-sm font-semibold">{r.book}:</span>
                     {bookingLinks(option.mode, searched).map((link) => (
-                      <a key={link.name} href={link.url} target="_blank" rel="noopener noreferrer" className="text-sm font-semibold text-apricot-dark hover:underline">
+                      <a key={link.name} href={link.url} target="_blank" rel="noopener noreferrer" className="text-sm font-semibold text-brand-strong hover:underline">
                         {link.name} ↗
                       </a>
                     ))}

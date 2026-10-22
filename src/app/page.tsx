@@ -4,9 +4,21 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { ArrowRight, Building2, Bus, Car, Croissant, Landmark, Map as MapIcon, Plane, Sailboat, TrainFront, Trees, Wine } from "lucide-react";
 import { OPTIONS } from "@/components/OptionsBar";
 import { useLanguage } from "@/lib/i18n";
 import { WONDERS, type Wonder } from "@/data/wonders";
+
+// A color and a line icon for each destination card, in the dictionary's order.
+const CITY_LOOKS = [
+  { gradient: "from-rose-500 to-red-700", icon: Wine },
+  { gradient: "from-amber-500 to-orange-700", icon: Building2 },
+  { gradient: "from-sky-500 to-blue-700", icon: Croissant },
+  { gradient: "from-orange-400 to-rose-600", icon: Landmark },
+  { gradient: "from-indigo-500 to-violet-700", icon: Sailboat },
+  { gradient: "from-emerald-500 to-teal-700", icon: Trees },
+];
+const MODE_ICONS = { plane: Plane, train: TrainFront, bus: Bus, car: Car };
 
 // The globe uses WebGL, so it only loads in the browser.
 const WonderGlobe = dynamic(() => import("@/components/WonderGlobe"), { ssr: false });
@@ -18,7 +30,7 @@ export default function Home() {
   return (
     <>
       {/* Hero with the search box, like trip.com */}
-      <section className="bg-gradient-to-b from-apricot/15 to-transparent">
+      <section className="bg-gradient-to-b from-brand/15 to-transparent">
         <div className="mx-auto max-w-6xl px-4 pt-12 pb-10 sm:px-6 lg:pt-16">
           <h1 className="text-4xl leading-tight font-extrabold sm:text-5xl">{t.home.title}</h1>
           <p className="mt-3 max-w-2xl text-lg text-ink/70">{t.home.subtitle}</p>
@@ -26,38 +38,93 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Popular destinations */}
+      {/* Get inspired: destinations */}
       <section className="mx-auto w-full max-w-6xl px-4 pb-14 sm:px-6">
-        <h2 className="text-2xl font-bold">{t.home.popularTitle}</h2>
-        <p className="mt-1 text-ink/70">{t.home.popularSubtitle}</p>
-        <ul className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-          {t.home.cities.map((city) => (
-            <li key={city.query}>
-              <Link
-                href={`/planner?destination=${encodeURIComponent(city.query)}`}
-                className="card flex h-full flex-col p-4 transition hover:-translate-y-0.5 hover:border-apricot"
-              >
-                <span className="text-3xl" aria-hidden>{city.emoji}</span>
-                <span className="mt-3 font-bold">{city.name}</span>
-                <span className="text-sm text-ink/60">{city.country}</span>
-              </Link>
-            </li>
-          ))}
+        <h2 className="text-2xl font-bold sm:text-3xl">{t.home.inspireTitle}</h2>
+        <p className="mt-1 text-ink/70">{t.home.inspireSubtitle}</p>
+        <ul className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {t.home.cities.map((city, i) => {
+            const look = CITY_LOOKS[i % CITY_LOOKS.length];
+            return (
+              <li key={city.query}>
+                <Link
+                  href={`/planner?destination=${encodeURIComponent(city.query)}`}
+                  className="card group flex h-full flex-col overflow-hidden transition hover:-translate-y-0.5 hover:shadow-md"
+                >
+                  <div className={`relative flex h-32 items-end bg-gradient-to-br p-4 text-white ${look.gradient}`}>
+                    <look.icon aria-hidden className="absolute top-4 right-4 h-14 w-14 opacity-30" strokeWidth={1.5} />
+                    <div>
+                      <div className="text-2xl font-extrabold">{city.name}</div>
+                      <div className="text-sm text-white/85">{city.country}</div>
+                    </div>
+                  </div>
+                  <div className="flex flex-1 flex-col p-4">
+                    <p className="text-sm text-ink/75">{city.hook}</p>
+                    <span className="mt-auto flex items-center gap-1 pt-3 text-sm font-semibold text-brand-strong">
+                      {t.home.planTrip}
+                      <ArrowRight aria-hidden className="h-4 w-4 transition group-hover:translate-x-0.5" />
+                    </span>
+                  </div>
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </section>
 
+      {/* Travel inspiration: popular routes */}
+      <section className="border-t border-line bg-surface py-14">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <h2 className="text-2xl font-bold sm:text-3xl">{t.home.routesTitle}</h2>
+          <p className="mt-1 max-w-3xl text-ink/70">{t.home.routesSubtitle}</p>
+          <ul className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {t.home.routes.map((route) => (
+              <li key={route.query}>
+                <Link
+                  href={`/routes?from=Yerevan&to=${encodeURIComponent(route.query)}`}
+                  className="group flex h-full flex-col rounded-2xl border border-line bg-page p-4 transition hover:border-brand"
+                >
+                  <div className="flex items-center gap-2 font-bold">
+                    <span className="truncate">{t.home.from}</span>
+                    <ArrowRight aria-hidden className="h-4 w-4 shrink-0 text-brand" />
+                    <span className="truncate">{route.to}</span>
+                  </div>
+                  <ul className="mt-3 space-y-1.5 text-sm">
+                    {route.legs.map((leg) => {
+                      const mode = leg.mode as keyof typeof MODE_ICONS;
+                      const Icon = MODE_ICONS[mode];
+                      return (
+                        <li key={leg.mode} className="flex items-center gap-2 text-ink/75">
+                          <Icon aria-hidden className="h-4 w-4 shrink-0 text-brand-strong" />
+                          <span className="font-medium text-ink">{t.home.modes[mode]}</span>
+                          <span className="ml-auto text-right">{leg.time}</span>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                  <span className="mt-auto flex items-center gap-1 pt-3 text-sm font-semibold text-brand-strong">
+                    {t.home.routesCta}
+                    <ArrowRight aria-hidden className="h-4 w-4 transition group-hover:translate-x-0.5" />
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
       {/* Trip planner */}
-      <section id="planner" className="scroll-mt-20 border-y border-line bg-surface py-16">
+      <section id="planner" className="scroll-mt-20 py-16">
         <div className="mx-auto grid max-w-6xl gap-8 px-4 sm:px-6 lg:grid-cols-2 lg:items-center">
           <div>
-            <h2 className="text-3xl font-bold">🗺️ {t.planner.teaser.title}</h2>
+            <h2 className="flex items-center gap-3 text-3xl font-bold"><MapIcon aria-hidden className="h-8 w-8 text-brand" />{t.planner.teaser.title}</h2>
             <p className="mt-3 text-lg text-ink/70">{t.planner.teaser.text}</p>
             <Link href="/planner" className="btn-primary mt-6">{t.planner.teaser.cta}</Link>
           </div>
           <ol className="space-y-3">
             {t.planner.teaser.steps.map((step, i) => (
-              <li key={step} className="flex items-center gap-4 rounded-2xl bg-muted p-5">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-apricot font-bold text-white">{i + 1}</span>
+              <li key={step} className="card flex items-center gap-4 p-5">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-brand font-bold text-white">{i + 1}</span>
                 <span className="font-semibold">{step}</span>
               </li>
             ))}
@@ -66,7 +133,7 @@ export default function Home() {
       </section>
 
       {/* The wonders globe */}
-      <section id="wonders" className="scroll-mt-20 py-16">
+      <section id="wonders" className="scroll-mt-20 border-t border-line bg-surface py-16">
         <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-8 px-4 sm:px-6 lg:grid-cols-2">
           <div className="min-w-0">
             <h2 className="text-3xl font-bold">{t.globe.title}</h2>
@@ -75,7 +142,7 @@ export default function Home() {
               {(["new", "ancient"] as const).map((group) => (
                 <div key={group}>
                   <h3 className="flex items-center gap-2 text-sm font-semibold">
-                    <span className={`h-3 w-3 rounded-full ${group === "new" ? "bg-apricot" : "bg-pomegranate"}`} />
+                    <span className={`h-3 w-3 rounded-full ${group === "new" ? "bg-brand" : "bg-pomegranate"}`} />
                     {group === "new" ? t.globe.newWonders : t.globe.ancientWonders}
                   </h3>
                   <ul className="mt-2 flex flex-wrap gap-2">
@@ -104,7 +171,7 @@ export default function Home() {
       </section>
 
       {/* FAQ */}
-      <section id="faq" className="border-t border-line bg-surface py-16">
+      <section id="faq" className="border-t border-line py-16">
         <div className="mx-auto max-w-3xl px-4 sm:px-6">
           <h2 className="text-3xl font-bold">{t.faq.title}</h2>
           <div className="mt-6 space-y-3">
@@ -112,7 +179,7 @@ export default function Home() {
               <details key={item.q} className="group rounded-2xl bg-muted p-5">
                 <summary className="flex cursor-pointer list-none items-center justify-between font-semibold">
                   {item.q}
-                  <span className="text-apricot transition group-open:rotate-45">+</span>
+                  <span className="text-brand transition group-open:rotate-45">+</span>
                 </summary>
                 <p className="mt-3 text-ink/70">{item.a}</p>
               </details>
@@ -175,10 +242,10 @@ function SearchBox() {
             aria-selected={tab === option.key}
             onClick={() => setTab(option.key as Tab)}
             className={`flex shrink-0 items-center gap-1.5 border-b-2 px-4 py-2.5 text-sm font-semibold transition ${
-              tab === option.key ? "border-apricot text-apricot-dark" : "border-transparent text-ink/70 hover:text-ink"
+              tab === option.key ? "border-brand text-brand-strong" : "border-transparent text-ink/70 hover:text-ink"
             }`}
           >
-            <span aria-hidden>{option.icon}</span>
+            <option.icon aria-hidden className="h-4 w-4" />
             {t.nav[option.key]}
           </button>
         ))}
@@ -193,7 +260,7 @@ function SearchBox() {
         <form onSubmit={submit} className="p-5 sm:p-6">
           {tab === "routes" && (
             <label className="mb-4 inline-flex cursor-pointer items-center gap-2 text-sm font-semibold">
-              <input type="checkbox" checked={oneWay} onChange={(e) => setOneWay(e.target.checked)} className="h-4 w-4 accent-apricot" />
+              <input type="checkbox" checked={oneWay} onChange={(e) => setOneWay(e.target.checked)} className="h-4 w-4 accent-brand" />
               {t.routes.oneWay}
             </label>
           )}
@@ -233,7 +300,7 @@ function WonderCard({ wonder, onClose }: { wonder: Wonder; onClose: () => void }
   return (
     <div className="card absolute right-2 bottom-2 left-2 p-4 sm:left-auto sm:w-72">
       <button onClick={onClose} className="absolute top-2 right-3 text-xl text-ink/40 hover:text-ink" aria-label="Close">×</button>
-      <p className={`text-xs font-semibold ${wonder.group === "new" ? "text-apricot-dark" : "text-pomegranate"}`}>
+      <p className={`text-xs font-semibold ${wonder.group === "new" ? "text-brand-strong" : "text-pomegranate"}`}>
         {wonder.group === "new" ? t.globe.newWonders : t.globe.ancientWonders}
       </p>
       <p className="mt-1 text-lg font-bold">{wonder.name[lang]}</p>

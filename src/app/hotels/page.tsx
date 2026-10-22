@@ -1,5 +1,7 @@
 "use client";
 
+import { Info, MapPin, Star } from "lucide-react";
+import { PageTitle } from "@/components/OptionsBar";
 import { Suspense, useCallback, useState } from "react";
 import LoadingResults from "@/components/LoadingResults";
 import QueryPrefill from "@/components/QueryPrefill";
@@ -68,7 +70,7 @@ export default function HotelsPage() {
       <Suspense>
         <QueryPrefill onParams={prefill} />
       </Suspense>
-      <h1 className="text-3xl font-extrabold sm:text-4xl">🏨 {h.title}</h1>
+      <PageTitle option="hotels">{h.title}</PageTitle>
       <p className="mt-3 max-w-2xl text-lg text-ink/70">{h.subtitle}</p>
 
       <form onSubmit={submit} className="card mt-8 grid gap-3 p-5 sm:grid-cols-2 sm:p-6 lg:grid-cols-[1fr_160px_160px_90px_170px_auto] lg:items-end">
@@ -126,8 +128,8 @@ export default function HotelsPage() {
         ) : (
           <>
             <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-muted px-4 py-3 text-sm">
-              <span>ℹ️ {h.estimate}</span>
-              <a href={bookingComUrl(searched)} target="_blank" rel="noopener noreferrer" className="font-semibold text-apricot-dark hover:underline">
+              <span><Info aria-hidden className="mr-1.5 inline h-4 w-4 -translate-y-px text-brand-strong" />{h.estimate}</span>
+              <a href={bookingComUrl(searched)} target="_blank" rel="noopener noreferrer" className="font-semibold text-brand-strong hover:underline">
                 {h.searchAll}: Booking.com ↗
               </a>
             </div>
@@ -136,12 +138,16 @@ export default function HotelsPage() {
                 <li key={hotel.name} className="card flex flex-col p-5">
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <p className="text-sm text-apricot" aria-label={`${hotel.stars}★`}>{"★".repeat(hotel.stars)}</p>
+                      <p className="flex gap-0.5 text-amber-500" aria-label={`${hotel.stars}★`}>
+                        {Array.from({ length: hotel.stars }, (_, i) => (
+                          <Star key={i} aria-hidden className="h-3.5 w-3.5 fill-current" />
+                        ))}
+                      </p>
                       <h2 className="text-lg font-bold">{hotel.name}</h2>
-                      <p className="text-sm text-ink/60">📍 {hotel.area}</p>
+                      <p className="flex items-center gap-1 text-sm text-ink/60"><MapPin aria-hidden className="h-3.5 w-3.5 shrink-0" />{hotel.area}</p>
                     </div>
                     <div className="shrink-0 text-right">
-                      <div className="font-extrabold text-apricot-dark">
+                      <div className="font-extrabold text-brand-strong">
                         {hotel.priceAmdMin === hotel.priceAmdMax ? amd(hotel.priceAmdMin) : `${amd(hotel.priceAmdMin)} – ${amd(hotel.priceAmdMax)}`}
                       </div>
                       <div className="text-xs text-ink/60">{h.perNight}</div>
@@ -156,7 +162,7 @@ export default function HotelsPage() {
                   <div className="mt-auto flex flex-wrap items-center gap-x-4 gap-y-2 pt-4">
                     <span className="text-sm font-semibold">{h.book}:</span>
                     {hotelLinks(hotel.name, searched).map((link) => (
-                      <a key={link.name} href={link.url} target="_blank" rel="noopener noreferrer" className="text-sm font-semibold text-apricot-dark hover:underline">
+                      <a key={link.name} href={link.url} target="_blank" rel="noopener noreferrer" className="text-sm font-semibold text-brand-strong hover:underline">
                         {link.name} ↗
                       </a>
                     ))}

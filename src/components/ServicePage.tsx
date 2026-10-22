@@ -1,5 +1,7 @@
 "use client";
 
+import { Info } from "lucide-react";
+import { PageTitle } from "@/components/OptionsBar";
 import { useState } from "react";
 import LoadingResults from "@/components/LoadingResults";
 import { useLanguage } from "@/lib/i18n";
@@ -8,12 +10,6 @@ import type { OfferKind, OfferResult } from "@/lib/offers/types";
 
 const amd = (n: number) => `${n.toLocaleString("en-US")} ֏`;
 
-const ICONS: Record<ServiceKey, string> = {
-  cars: "🚗",
-  tours: "🎟️",
-  cruises: "🚢",
-  esim: "📶",
-};
 
 // One page for each partner-search option: a form, then the search opens on the partner sites.
 // Tours and cruises (modes with optionLinks) show an AI list of options first, each with booking links.
@@ -112,9 +108,7 @@ export default function ServicePage({ service }: { service: ServiceKey }) {
 
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-10 sm:px-6">
-      <h1 className="text-3xl font-extrabold sm:text-4xl">
-        {ICONS[service]} {info.title}
-      </h1>
+      <PageTitle option={service}>{info.title}</PageTitle>
       <p className="mt-3 max-w-2xl text-lg text-ink/70">{info.subtitle}</p>
 
       <div className="card mt-8 overflow-hidden">
@@ -127,7 +121,7 @@ export default function ServicePage({ service }: { service: ServiceKey }) {
                 aria-selected={i === modeIndex}
                 onClick={() => setModeIndex(i)}
                 className={`border-b-2 px-4 py-2.5 text-sm font-semibold transition ${
-                  i === modeIndex ? "border-apricot text-apricot-dark" : "border-transparent text-ink/70 hover:text-ink"
+                  i === modeIndex ? "border-brand text-brand-strong" : "border-transparent text-ink/70 hover:text-ink"
                 }`}
               >
                 {(info.modes as Record<string, string>)[m.key]}
@@ -192,7 +186,7 @@ export default function ServicePage({ service }: { service: ServiceKey }) {
           </span>
           {others.map((partner) =>
             complete ? (
-              <a key={partner.name} href={partner.url} target="_blank" rel="noopener noreferrer" className="font-semibold text-apricot-dark hover:underline">
+              <a key={partner.name} href={partner.url} target="_blank" rel="noopener noreferrer" className="font-semibold text-brand-strong hover:underline">
                 {partner.name} ↗
               </a>
             ) : (
@@ -203,7 +197,7 @@ export default function ServicePage({ service }: { service: ServiceKey }) {
           )}
         </div>
       )}
-      {!mode.optionLinks && <p className="mt-6 rounded-2xl bg-muted px-4 py-3 text-sm">ℹ️ {s.note}</p>}
+      {!mode.optionLinks && <p className="mt-6 rounded-2xl bg-muted px-4 py-3 text-sm"><Info aria-hidden className="mr-1.5 inline h-4 w-4 -translate-y-px text-brand-strong" />{s.note}</p>}
     </div>
   );
 }
@@ -238,8 +232,8 @@ function OptionsList({ result, searched, loading, mode }: { result: OfferResult 
       ) : (
         <>
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-muted px-4 py-3 text-sm">
-            <span>ℹ️ {r.estimate}</span>
-            <span className="flex flex-wrap gap-x-4">{mode.partners(searched).map((l) => link(l, "font-semibold text-apricot-dark hover:underline"))}</span>
+            <span><Info aria-hidden className="mr-1.5 inline h-4 w-4 -translate-y-px text-brand-strong" />{r.estimate}</span>
+            <span className="flex flex-wrap gap-x-4">{mode.partners(searched).map((l) => link(l, "font-semibold text-brand-strong hover:underline"))}</span>
           </div>
           <ul className="mt-4 grid gap-4 md:grid-cols-2">
             {result.options.map((option) => (
@@ -247,7 +241,7 @@ function OptionsList({ result, searched, loading, mode }: { result: OfferResult 
                 <div className="flex items-start justify-between gap-3">
                   <h2 className="min-w-0 text-lg font-bold">{option.title}</h2>
                   <div className="shrink-0 text-right">
-                    <div className="font-extrabold text-apricot-dark">
+                    <div className="font-extrabold text-brand-strong">
                       {option.priceAmdMin === option.priceAmdMax ? amd(option.priceAmdMin) : `${amd(option.priceAmdMin)} – ${amd(option.priceAmdMax)}`}
                     </div>
                     <div className="text-xs text-ink/60">{r[mode.priceNote ?? "perPerson"]}</div>
@@ -268,7 +262,7 @@ function OptionsList({ result, searched, loading, mode }: { result: OfferResult 
                 )}
                 <div className="mt-auto flex flex-wrap items-center gap-x-4 gap-y-2 pt-4">
                   <span className="text-sm font-semibold">{r.book}:</span>
-                  {mode.optionLinks!(option, searched).map((l) => link(l, "text-sm font-semibold text-apricot-dark hover:underline"))}
+                  {mode.optionLinks!(option, searched).map((l) => link(l, "text-sm font-semibold text-brand-strong hover:underline"))}
                 </div>
               </li>
             ))}

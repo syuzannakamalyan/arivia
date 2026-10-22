@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { ArrowDown, ArrowUp, Baby, Check, Landmark, Lightbulb, MapPin, Music, PenLine, Pencil, Plus, ShoppingBag, Sparkles, Trees, Utensils, X } from "lucide-react";
+import { OPTION_ICONS, PageTitle } from "@/components/OptionsBar";
 import LoadingResults from "@/components/LoadingResults";
 import { useLanguage } from "@/lib/i18n";
 import type { PlanResult } from "@/lib/planner";
@@ -25,6 +27,7 @@ type Trip = {
 type AiNote = Pick<PlanResult, "source" | "reason" | "detail">;
 
 const STORAGE_KEY = "arivia-trip";
+const INTEREST_ICONS = { food: Utensils, history: Landmark, nature: Trees, shopping: ShoppingBag, nightlife: Music, kids: Baby };
 const TIMES = ["morning", "afternoon", "evening"] as const;
 const EMPTY: Trip = { destination: "", startDate: "", endDate: "", travellers: 2, days: [], tips: [], split: null };
 
@@ -154,7 +157,7 @@ export default function PlannerPage() {
 
   return (
     <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6">
-      <h1 className="text-3xl font-extrabold sm:text-4xl">🗺️ {p.title}</h1>
+      <PageTitle option="planner">{p.title}</PageTitle>
       <p className="mt-3 max-w-2xl text-lg text-ink/70">{p.subtitle}</p>
 
       {/* Where, when, who */}
@@ -180,8 +183,9 @@ export default function PlannerPage() {
             type="button"
             aria-pressed={mode === key}
             onClick={() => setMode(key)}
-            className={`rounded-xl px-5 py-2.5 text-sm font-semibold transition ${mode === key ? "bg-surface text-ink shadow-sm" : "text-ink/70 hover:text-ink"}`}
+            className={`flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold transition ${mode === key ? "bg-surface text-ink shadow-sm" : "text-ink/70 hover:text-ink"}`}
           >
+            {key === "self" ? <PenLine aria-hidden className="h-4 w-4" /> : <Sparkles aria-hidden className="h-4 w-4" />}
             {p.modes[key]}
           </button>
         ))}
@@ -202,8 +206,12 @@ export default function PlannerPage() {
                     type="button"
                     aria-pressed={on}
                     onClick={() => toggle(interest)}
-                    className={`rounded-full px-3 py-1.5 text-sm font-medium transition ${on ? "bg-apricot text-white" : "bg-muted text-ink/75 hover:bg-line"}`}
+                    className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition ${on ? "bg-brand text-white" : "bg-muted text-ink/75 hover:bg-line"}`}
                   >
+                    {(() => {
+                      const Icon = INTEREST_ICONS[interest];
+                      return <Icon aria-hidden className="h-4 w-4" />;
+                    })()}
                     {p.interests[interest]}
                   </button>
                 );
@@ -287,24 +295,30 @@ export default function PlannerPage() {
             <div className="card p-5">
               <h2 className="font-bold">{e.book}</h2>
               <div className="mt-3 flex flex-wrap gap-2 text-sm">
-                {[
-                  [`🏨 ${t.nav.hotels}`, `/hotels?destination=${enc(destination)}&checkin=${startDate}&checkout=${endDate}&guests=${travellers}`],
-                  [`✈️ ${t.nav.routes}`, `/routes?from=Yerevan&to=${enc(destination)}&date=${startDate}&return=${endDate}&travellers=${travellers}`],
-                  [`🎟️ ${t.nav.tours}`, "/tours"],
-                  [`🚗 ${t.nav.cars}`, "/cars"],
-                  [`📶 ${t.nav.esim}`, "/esim"],
-                  [`🛂 ${t.nav.visa}`, "/visa"],
-                ].map(([label, href]) => (
-                  <Link key={href} href={href} className="rounded-full bg-muted px-3 py-1.5 font-semibold hover:bg-line">
-                    {label}
-                  </Link>
-                ))}
+                {(
+                  [
+                    ["hotels", `/hotels?destination=${enc(destination)}&checkin=${startDate}&checkout=${endDate}&guests=${travellers}`],
+                    ["routes", `/routes?from=Yerevan&to=${enc(destination)}&date=${startDate}&return=${endDate}&travellers=${travellers}`],
+                    ["tours", "/tours"],
+                    ["cars", "/cars"],
+                    ["esim", "/esim"],
+                    ["visa", "/visa"],
+                  ] as const
+                ).map(([key, href]) => {
+                  const Icon = OPTION_ICONS[key];
+                  return (
+                    <Link key={key} href={href} className="flex items-center gap-1.5 rounded-full bg-muted px-3 py-1.5 font-semibold hover:bg-line">
+                      <Icon aria-hidden className="h-4 w-4 text-brand-strong" />
+                      {t.nav[key]}
+                    </Link>
+                  );
+                })}
               </div>
             </div>
             <Ideas trip={trip} interests={interests} onAdd={(index, idea) => setDay(index, (d) => ({ ...d, stops: [...d.stops, { ...idea, id: newId() }] }))} />
             {trip.tips.length > 0 && (
               <div className="card p-5">
-                <h2 className="font-bold">💡 {p.result.tips}</h2>
+                <h2 className="flex items-center gap-2 font-bold"><Lightbulb aria-hidden className="h-5 w-5 text-brand-strong" />{p.result.tips}</h2>
                 <ul className="mt-3 list-disc space-y-1.5 pl-5 text-sm text-ink/75">
                   {trip.tips.map((tip) => (
                     <li key={tip}>{tip}</li>
@@ -313,7 +327,7 @@ export default function PlannerPage() {
               </div>
             )}
             <div className="flex items-center justify-between text-sm">
-              <span className="text-ink/60">✓ {e.saved}</span>
+              <span className="flex items-center gap-1 text-ink/60"><Check aria-hidden className="h-4 w-4" />{e.saved}</span>
               <button type="button" onClick={reset} className="font-semibold text-pomegranate hover:underline">
                 {e.reset}
               </button>
@@ -354,7 +368,7 @@ function DayCard({
   return (
     <li className="card p-5">
       <div className="flex flex-wrap items-center gap-3">
-        <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-apricot text-sm font-bold text-white">{index + 1}</span>
+        <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand text-sm font-bold text-white">{index + 1}</span>
         <div className="min-w-0 flex-1">
           <div className="text-xs font-semibold text-ink/60">
             {e.day.replace("{n}", String(index + 1))} · {showDate(day.date)}
@@ -385,20 +399,21 @@ function DayCard({
             </li>
           ) : (
             <li key={stop.id} className="grid grid-cols-[76px_1fr] gap-x-3 gap-y-1 py-3 text-sm sm:grid-cols-[84px_1fr_auto]">
-              <span className="font-semibold text-apricot-dark">{p.times[stop.time]}</span>
+              <span className="font-semibold text-brand-strong">{p.times[stop.time]}</span>
               <span className="min-w-0">
                 <button type="button" onClick={() => onShow(stop.place)} className="text-left font-semibold hover:underline" title={e.showMap}>
-                  📍 {stop.place}
+                  <MapPin aria-hidden className="mr-1 inline h-4 w-4 -translate-y-px text-brand-strong" />
+                  {stop.place}
                 </button>
                 {stop.description && <span className="block text-ink/70">{stop.description}</span>}
               </span>
               <span className="col-start-2 flex flex-wrap items-center gap-x-3 gap-y-1 sm:col-start-3 sm:justify-end">
                 <span className="whitespace-nowrap text-ink/70">{stop.costAmd ? amd(stop.costAmd) : p.result.free}</span>
                 <span className="flex gap-1 text-ink/60">
-                  <IconButton label={e.up} disabled={i === 0} onClick={() => move(i, i - 1)}>↑</IconButton>
-                  <IconButton label={e.down} disabled={i === day.stops.length - 1} onClick={() => move(i, i + 1)}>↓</IconButton>
-                  <IconButton label={e.edit} onClick={() => setEditing(stop.id)}>✎</IconButton>
-                  <IconButton label={e.remove} onClick={() => onChange((d) => ({ ...d, stops: d.stops.filter((s) => s.id !== stop.id) }))}>✕</IconButton>
+                  <IconButton label={e.up} disabled={i === 0} onClick={() => move(i, i - 1)}><ArrowUp className="h-4 w-4" /></IconButton>
+                  <IconButton label={e.down} disabled={i === day.stops.length - 1} onClick={() => move(i, i + 1)}><ArrowDown className="h-4 w-4" /></IconButton>
+                  <IconButton label={e.edit} onClick={() => setEditing(stop.id)}><Pencil className="h-4 w-4" /></IconButton>
+                  <IconButton label={e.remove} onClick={() => onChange((d) => ({ ...d, stops: d.stops.filter((s) => s.id !== stop.id) }))}><X className="h-4 w-4" /></IconButton>
                 </span>
               </span>
             </li>
@@ -418,7 +433,7 @@ function DayCard({
         </div>
       ) : (
         <div className="mt-2 flex flex-wrap items-center justify-between gap-3">
-          <button type="button" onClick={() => setEditing("new")} className="text-sm font-semibold text-apricot-dark hover:underline">
+          <button type="button" onClick={() => setEditing("new")} className="text-sm font-semibold text-brand-strong hover:underline">
             {e.add}
           </button>
           {day.stops.length > 0 && (
@@ -519,7 +534,7 @@ function Costs({ trip }: { trip: Trip }) {
                 <dd className="font-semibold">{amd(split[key])}</dd>
               </div>
               <div className="mt-1 h-1.5 rounded-full bg-on-panel/15">
-                <div className="h-1.5 rounded-full bg-apricot" style={{ width: `${total ? (split[key] / total) * 100 : 0}%` }} />
+                <div className="h-1.5 rounded-full bg-brand" style={{ width: `${total ? (split[key] / total) * 100 : 0}%` }} />
               </div>
             </div>
           ))}
@@ -563,7 +578,7 @@ function Ideas({ trip, interests, onAdd }: { trip: Trip; interests: Interest[]; 
 
   return (
     <div className="card p-5">
-      <h2 className="font-bold">✨ {e.ideas}</h2>
+      <h2 className="flex items-center gap-2 font-bold"><Sparkles aria-hidden className="h-5 w-5 text-brand-strong" />{e.ideas}</h2>
       <p className="mt-1 text-sm text-ink/60">{e.ideasText}</p>
       <button type="button" onClick={suggest} disabled={loading} className="btn-secondary mt-3 w-full !py-2">
         {loading ? e.ideasLoading : e.ideasCta}
@@ -603,9 +618,9 @@ function Ideas({ trip, interests, onAdd }: { trip: Trip; interests: Interest[]; 
                       onAdd(Math.min(target, trip.days.length - 1), idea);
                       setAdded((list) => [...list, idea.place]);
                     }}
-                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-apricot font-bold text-white disabled:bg-line disabled:text-ink/50"
+                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand font-bold text-white disabled:bg-line disabled:text-ink/50"
                   >
-                    {done ? "✓" : "+"}
+                    {done ? <Check className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
                   </button>
                 </li>
               );

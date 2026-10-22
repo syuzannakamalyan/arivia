@@ -5,7 +5,7 @@ import type { GlobeInstance } from "globe.gl";
 import type { GeometryCollection, Topology } from "topojson-specification";
 import { WONDERS, YEREVAN, type Wonder } from "@/data/wonders";
 
-const COLORS = { new: "#F28C28", ancient: "#B8323A", home: "#FFF8F0" };
+const COLORS = { new: "#3264FF", ancient: "#B8323A", home: "#FFF8F0" };
 
 type Props = {
   selected: Wonder | null;
@@ -58,15 +58,15 @@ export default function WonderGlobe({ selected, onSelect, lang }: Props) {
         .height(el.clientHeight)
         .backgroundColor("rgba(0,0,0,0)")
         .showAtmosphere(true)
-        .atmosphereColor("#F28C28")
+        .atmosphereColor("#3264FF")
         .atmosphereAltitude(0.18)
         .globeMaterial(new THREE.MeshPhongMaterial({ color: "#14213D", shininess: 8 }))
-        // Land drawn as small dots; Armenia (ISO 051) glows apricot.
+        // Land drawn as small dots; Armenia (ISO 051) glows brand.
         .hexPolygonsData(land.features)
         .hexPolygonResolution(3)
         .hexPolygonMargin(0.35)
         .hexPolygonUseDots(true)
-        .hexPolygonColor((f) => ((f as { id?: string }).id === "051" ? "#F28C28" : "rgba(255,248,240,0.75)"))
+        .hexPolygonColor((f) => ((f as { id?: string }).id === "051" ? "#3264FF" : "rgba(255,248,240,0.75)"))
         // Wonders as raised pins in two colors.
         .pointsData(WONDERS)
         .pointLat("lat")
@@ -86,7 +86,7 @@ export default function WonderGlobe({ selected, onSelect, lang }: Props) {
         .ringMaxRadius(4)
         .ringPropagationSpeed(2)
         .ringRepeatPeriod(1400)
-        .arcColor(() => ["#FFF8F0", "#F28C28"])
+        .arcColor(() => ["#FFF8F0", "#3264FF"])
         .arcDashLength(0.4)
         .arcDashGap(0.15)
         .arcDashAnimateTime(1800)

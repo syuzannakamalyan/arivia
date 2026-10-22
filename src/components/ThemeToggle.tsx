@@ -1,5 +1,6 @@
 "use client";
 
+import { Moon, Sun } from "lucide-react";
 import { useSyncExternalStore } from "react";
 import { useLanguage } from "@/lib/i18n";
 
@@ -34,7 +35,7 @@ export default function ThemeToggle() {
       title={label}
       className="flex h-10 w-10 items-center justify-center rounded-full border border-line bg-surface text-lg transition hover:border-ink/40"
     >
-      {dark ? "☀️" : "🌙"}
+      {dark ? <Sun aria-hidden className="h-5 w-5" /> : <Moon aria-hidden className="h-5 w-5" />}
     </button>
   );
 }
