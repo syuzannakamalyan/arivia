@@ -95,7 +95,10 @@ export async function generateGeminiPlan(request: TripRequest, apiKey: string): 
     }),
     signal: AbortSignal.timeout(45_000),
   });
-  if (!res.ok) throw new Error(`Gemini ${res.status}: ${(await res.text()).slice(0, 300)}`);
+  if (!res.ok) {
+    const error = await res.json().catch(() => null);
+    throw new Error(`Gemini ${res.status}: ${error?.error?.message ?? res.statusText}`);
+  }
 
   const data = await res.json();
   const text: string | undefined = data?.candidates?.[0]?.content?.parts?.[0]?.text;

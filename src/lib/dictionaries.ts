@@ -42,6 +42,7 @@ const hy = {
     subtitle: "Գրիր ուր ես գնում, երբ և ինչ բյուջեով, և ստացիր օր առ օր պլան՝ ինչ տեսնել, որտեղ ուտել և որքան կարժենա։",
     sampleBadge: "Օրինակային պլան",
     sampleNote: "AI-ը հիմա հասանելի չէ, ուստի սա ձևանմուշից ստեղծված օրինակ է։ Իրական AI պլանը կհայտնվի, երբ AI-ը միացված լինի։",
+    reasons: { noKey: "Պատճառ՝ AI բանալին (GEMINI_API_KEY) այս տարբերակում դեռ չկա։", aiFailed: "Պատճառ՝ AI-ը պատասխանեց սխալով" },
     form: {
       destination: "Ուր ես գնում",
       destinationPlaceholder: "Օրինակ՝ Հռոմ",
@@ -351,6 +352,7 @@ const en: Dictionary = {
     subtitle: "Tell us where you're going, when and on what budget, and get a day-by-day plan: what to see, where to eat and what it costs.",
     sampleBadge: "Sample plan",
     sampleNote: "AI isn't available right now, so this is a sample built from templates. Real AI plans appear once AI is connected.",
+    reasons: { noKey: "Reason: this version has no AI key (GEMINI_API_KEY) yet.", aiFailed: "Reason: the AI returned an error" },
     form: {
       destination: "Where are you going",
       destinationPlaceholder: "For example, Rome",

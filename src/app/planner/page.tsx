@@ -147,6 +147,12 @@ function Plan({ result }: { result: PlanResult }) {
         <p className="rounded-2xl bg-sand/70 px-4 py-3 text-sm">
           <span className="mr-2 rounded-full bg-navy px-2 py-0.5 text-xs font-semibold text-cream">{p.sampleBadge}</span>
           {p.sampleNote}
+          {result.reason && (
+            <span className="mt-1 block text-xs text-navy/60">
+              {p.reasons[result.reason]}
+              {result.detail && ` (${result.detail})`}
+            </span>
+          )}
         </p>
       )}
       <p className="mt-4 text-lg font-semibold">{plan.summary}</p>
