@@ -18,3 +18,12 @@ export function googleHotelsUrl({ destination, checkIn, checkOut, guests }: Hote
   const q = `hotels in ${destination} from ${checkIn} to ${checkOut} for ${guests} guests`;
   return `https://www.google.com/travel/search?q=${encodeURIComponent(q)}`;
 }
+
+// One hotel on the booking sites: its name plus the city finds the exact property.
+export function hotelLinks(name: string, search: HotelSearch) {
+  const named = { ...search, destination: `${name}, ${search.destination}` };
+  return [
+    { name: "Booking.com", url: bookingComUrl(named) },
+    { name: "Google Hotels", url: googleHotelsUrl({ ...search, destination: `${name} ${search.destination}` }) },
+  ];
+}

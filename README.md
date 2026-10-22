@@ -10,7 +10,7 @@ This first version has no accounts, so anyone can open every page:
 - **Visa guide** (`/visa`): where Armenian passport holders need a visa (link to the MFA lookup), the MFA rules for visiting Armenia, a residence-permit exemption checker and MFA contacts.
 - **AI planner** (`/planner`): destination, dates, travellers, budget in AMD, interests and pace in; a day-by-day plan with costs, a budget split and tips out.
 - **Route planner** (`/routes`): from, to, round trip by default (a One way checkbox drops the return date) and travellers in; flight, train, bus, car or ferry options with time, price estimates in AMD and links to Omio, Google Flights, Rome2rio or Google Maps.
-- **Hotels** (`/hotels`): city, dates and guests; opens the search on Booking.com, or Google Hotels.
+- **Hotels** (`/hotels`): city, dates, guests and an optional budget per night in; a list of 6 to 8 real hotels from Gemini (stars, area, price estimate per night in AMD, highlights), each with links to see and book it on Booking.com or Google Hotels.
 - **Light and dark mode**: follows the device setting; the moon / sun button in the header switches it and the choice is remembered.
 
 ## Run it on your computer
@@ -28,7 +28,7 @@ Then open http://localhost:3000.
 
 ## Turn on the AI planner
 
-Both planners use the same key. Without it, the route planner shows only search links, and the trip planner shows a sample plan built from templates. To get real AI plans from Google Gemini (free tier):
+The planners and the hotel list use the same key. Without it, the route planner and hotels show only search links, and the trip planner shows a sample plan built from templates. To get real AI plans from Google Gemini (free tier):
 
 1. Open [Google AI Studio](https://aistudio.google.com/apikey), sign in with Google and click **Create API key**.
 2. Copy `.env.example` to a new file named `.env.local` and paste the key after `GEMINI_API_KEY=`.
@@ -44,7 +44,8 @@ Both planners use the same key. Without it, the route planner shows only search 
 | Options menu and theme button | `src/components/OptionsBar.tsx`, `src/components/ThemeToggle.tsx` |
 | Cars, tours, cruises and eSIM pages and their partner links | `src/components/ServicePage.tsx`, `src/data/services.ts` |
 | Home page and its search box | `src/app/page.tsx` |
-| Hotels page and its partner links | `src/app/hotels/page.tsx`, `src/lib/hotels/links.ts` |
+| Hotels page | `src/app/hotels/page.tsx` |
+| Where the hotel list comes from (Gemini now, a live-price hotel API later) and the booking links | `src/lib/hotels/` |
 | The globe | `src/components/WonderGlobe.tsx` |
 | The 14 wonders and their places | `src/data/wonders.ts` |
 | AI planner page | `src/app/planner/page.tsx` |
