@@ -57,7 +57,7 @@ function isOptions(value: unknown): value is { options: RouteOption[] } {
 }
 
 export async function generateGeminiRoutes(request: RouteRequest, apiKey: string): Promise<RouteOption[]> {
-  const result = await callGeminiJson(prompt(request), ROUTES_SCHEMA, apiKey);
+  const result = await callGeminiJson(prompt(request), ROUTES_SCHEMA, apiKey, { quick: true });
   if (!isOptions(result) || result.options.length === 0) throw new Error("Gemini returned unexpected routes");
   return result.options;
 }

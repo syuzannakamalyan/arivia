@@ -198,3 +198,14 @@ export function generateSamplePlan(request: TripRequest): TripPlan {
     tips: TEXT.tips[lang],
   };
 }
+
+// Ideas for the trip planner's "Ideas from AI" box when AI isn't available: the templates for the chosen interests.
+export function sampleIdeas(city: string, interests: Interest[], lang: Lang): Activity[] {
+  const chosen: Interest[] = interests.length ? interests : ["history", "food"];
+  return chosen.flatMap((interest) =>
+    (["morning", "afternoon", "evening"] as Slot[]).map((time) => {
+      const idea = IDEAS[interest][time];
+      return { time, place: idea.place[lang], description: fill(idea.description[lang], { city }), costAmd: 0 };
+    }),
+  );
+}

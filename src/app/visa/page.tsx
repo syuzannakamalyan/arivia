@@ -1,18 +1,44 @@
 "use client";
 
 import { useState } from "react";
+import {
+  CalendarDays,
+  CalendarRange,
+  Compass,
+  Euro,
+  FileText,
+  Feather,
+  Globe,
+  IdCard,
+  Laptop,
+  Mail,
+  Hourglass,
+  Info,
+  Landmark,
+  Phone,
+  Plane,
+  Receipt,
+  Stamp,
+  Ticket,
+  Timer,
+  Undo2,
+} from "lucide-react";
+import { PageTitle } from "@/components/OptionsBar";
 import { useLanguage } from "@/lib/i18n";
 import { CONTACTS, EXEMPTION, LINKS, MFA_VISA_URL, SCHENGEN_LINKS, checkExemption } from "@/data/visaRules";
 
 // Each rule card and the links it shows, in the order of its dictionary link labels.
 const RULES = [
-  { key: "visaFree", icon: "🕊️", urls: [LINKS.visaFreeUnilateral, LINKS.visaFreeByAgreement] },
-  { key: "exemption", icon: "🪪", urls: [LINKS.exemptionCountries] },
-  { key: "evisa", icon: "💻", urls: [LINKS.evisa] },
-  { key: "length", icon: "📅", urls: [] },
-  { key: "invitation", icon: "✉️", urls: [LINKS.invitationOnly, LINKS.eRequest] },
-  { key: "laissezPasser", icon: "🇺🇳", urls: [] },
+  { key: "visaFree", icon: Feather, urls: [LINKS.visaFreeUnilateral, LINKS.visaFreeByAgreement] },
+  { key: "exemption", icon: IdCard, urls: [LINKS.exemptionCountries] },
+  { key: "evisa", icon: Laptop, urls: [LINKS.evisa] },
+  { key: "length", icon: CalendarDays, urls: [] },
+  { key: "invitation", icon: Mail, urls: [LINKS.invitationOnly, LINKS.eRequest] },
+  { key: "laissezPasser", icon: Globe, urls: [] },
 ] as const;
+
+// Icons for the Schengen facts, in the dictionary's order.
+const FACT_ICONS = [Landmark, Euro, Timer, CalendarRange, Globe, Hourglass, CalendarDays, Stamp, Undo2];
 
 type Tab = "citizens" | "visitors";
 
@@ -22,10 +48,10 @@ export default function VisaGuidePage() {
 
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-10 sm:px-6">
-      <h1 className="text-3xl font-extrabold sm:text-4xl">{t.visa.title}</h1>
-      <p className="mt-3 max-w-2xl text-lg text-navy/70">{t.visa.subtitle}</p>
+      <PageTitle option="visa">{t.visa.title}</PageTitle>
+      <p className="mt-3 max-w-2xl text-lg text-ink/70">{t.visa.subtitle}</p>
 
-      <div role="tablist" aria-label={t.visa.title} className="mt-8 grid grid-cols-2 gap-1 rounded-2xl bg-sand/60 p-1 sm:inline-grid">
+      <div role="tablist" aria-label={t.visa.title} className="mt-8 grid grid-cols-2 gap-1 rounded-2xl bg-muted/60 p-1 sm:inline-grid">
         {(["citizens", "visitors"] as const).map((key) => (
           <button
             key={key}
@@ -35,7 +61,7 @@ export default function VisaGuidePage() {
             aria-controls={`panel-${key}`}
             onClick={() => setTab(key)}
             className={`rounded-xl px-4 py-2.5 text-sm font-semibold transition sm:px-6 ${
-              tab === key ? "bg-navy text-cream shadow-sm" : "text-navy/70 hover:text-navy"
+              tab === key ? "bg-brand text-white shadow-sm" : "text-ink/70 hover:text-ink"
             }`}
           >
             {t.visa.tabs[key]}
@@ -53,7 +79,7 @@ export default function VisaGuidePage() {
         </div>
       )}
 
-      <p className="mt-6 text-sm text-navy/60">{t.visa.disclaimer}</p>
+      <p className="mt-6 text-sm text-ink/60">{t.visa.disclaimer}</p>
     </div>
   );
 }
@@ -65,31 +91,31 @@ function VisitorsSection() {
   const external = { target: "_blank", rel: "noopener noreferrer" } as const;
 
   return (
-    <section className="mt-8 rounded-3xl bg-navy p-6 text-cream shadow-sm sm:p-8">
+    <section className="mt-8 rounded-3xl bg-panel p-6 text-on-panel shadow-sm sm:p-8">
       <h2 className="text-2xl font-bold">🇦🇲 {v.title}</h2>
-      <h3 className="mt-4 text-xl font-semibold text-apricot">{v.subtitle}</h3>
-      <p className="mt-2 max-w-3xl text-cream/80">{v.text}</p>
+      <h3 className="mt-4 text-xl font-semibold text-brand-on-panel">{v.subtitle}</h3>
+      <p className="mt-2 max-w-3xl text-on-panel/80">{v.text}</p>
       <div className="mt-5 flex flex-wrap gap-3">
         <a href={MFA_VISA_URL} {...external} className="btn-primary">{t.visa.openSource} ↗</a>
-        <a href={LINKS.evisa} {...external} className="inline-flex items-center rounded-full border border-cream/30 px-5 py-3 font-semibold text-cream hover:bg-cream/10">
+        <a href={LINKS.evisa} {...external} className="inline-flex items-center rounded-full border border-on-panel/30 px-5 py-3 font-semibold text-on-panel hover:bg-on-panel/10">
           {v.evisa} ↗
         </a>
       </div>
-      <p className="mt-3 text-xs text-cream/60">{t.visa.source} · {t.visa.lastChecked}</p>
+      <p className="mt-3 text-xs text-on-panel/60">{t.visa.source} · {t.visa.lastChecked}</p>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {RULES.map(({ key, icon, urls }) => {
+        {RULES.map(({ key, icon: Icon, urls }) => {
           const rule = t.visa.rules[key];
           return (
-            <article key={key} className="rounded-2xl bg-cream/10 p-5">
+            <article key={key} className="rounded-2xl bg-on-panel/10 p-5">
               <h4 className="flex items-center gap-2 font-bold">
-                <span aria-hidden>{icon}</span> {rule.title}
+                <Icon aria-hidden className="h-5 w-5 shrink-0 text-brand-on-panel" /> {rule.title}
               </h4>
-              <p className="mt-2 text-sm text-cream/80">{rule.text}</p>
+              <p className="mt-2 text-sm text-on-panel/80">{rule.text}</p>
               {urls.length > 0 && (
                 <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1">
                   {urls.map((url, i) => (
-                    <a key={url} href={url} {...external} className="text-sm font-semibold text-apricot hover:underline">
+                    <a key={url} href={url} {...external} className="text-sm font-semibold text-brand-on-panel hover:underline">
                       {(rule.links as readonly string[])[i]} ↗
                     </a>
                   ))}
@@ -102,21 +128,21 @@ function VisitorsSection() {
 
       <ExemptionChecker />
 
-      <details className="mt-3 rounded-2xl bg-cream/10 p-5">
-        <summary className="cursor-pointer font-bold">📞 {t.visa.contacts.title}</summary>
+      <details className="mt-3 rounded-2xl bg-on-panel/10 p-5">
+        <summary className="cursor-pointer font-bold"><Phone aria-hidden className="mr-2 inline h-4 w-4 -translate-y-px text-brand-on-panel" />{t.visa.contacts.title}</summary>
         <dl className="mt-4 grid gap-4 text-sm sm:grid-cols-3">
           <div>
             <dt className="font-semibold">Email</dt>
-            <dd><a href={`mailto:${CONTACTS.email}`} className="text-apricot hover:underline">{CONTACTS.email}</a></dd>
-            <dd className="mt-1 text-cream/60">{t.visa.contacts.emailNote}</dd>
+            <dd><a href={`mailto:${CONTACTS.email}`} className="text-brand-on-panel hover:underline">{CONTACTS.email}</a></dd>
+            <dd className="mt-1 text-on-panel/60">{t.visa.contacts.emailNote}</dd>
           </div>
           <div>
             <dt className="font-semibold">{t.visa.contacts.entry}</dt>
-            {CONTACTS.entryPhones.map((phone) => <dd key={phone} className="text-cream/80">{phone}</dd>)}
+            {CONTACTS.entryPhones.map((phone) => <dd key={phone} className="text-on-panel/80">{phone}</dd>)}
           </div>
           <div>
             <dt className="font-semibold">{t.visa.contacts.invitations}</dt>
-            {CONTACTS.invitationPhones.map((phone) => <dd key={phone} className="text-cream/80">{phone}</dd>)}
+            {CONTACTS.invitationPhones.map((phone) => <dd key={phone} className="text-on-panel/80">{phone}</dd>)}
           </div>
         </dl>
       </details>
@@ -133,27 +159,31 @@ function SchengenSection() {
   const external = { target: "_blank", rel: "noopener noreferrer" } as const;
 
   return (
-    <section className="mt-8 rounded-3xl bg-navy p-6 text-cream shadow-sm sm:p-8">
-      <h2 className="text-2xl font-bold">✈️ {a.title}</h2>
-      <h3 className="mt-4 text-xl font-semibold text-apricot">{a.schengenTitle}</h3>
-      <p className="mt-2 max-w-3xl text-cream/80">{a.text}</p>
+    <section className="mt-8 rounded-3xl bg-panel p-6 text-on-panel shadow-sm sm:p-8">
+      <h2 className="flex items-center gap-2 text-2xl font-bold"><Plane aria-hidden className="h-6 w-6 text-brand-on-panel" />{a.title}</h2>
+      <h3 className="mt-4 text-xl font-semibold text-brand-on-panel">{a.schengenTitle}</h3>
+      <p className="mt-2 max-w-3xl text-on-panel/80">{a.text}</p>
       <div className="mt-5 flex flex-wrap gap-3">
         <a href={links.page} {...external} className="btn-primary">{a.button} ↗</a>
-        <a href={links.calculator} {...external} className="inline-flex items-center rounded-full border border-cream/30 px-5 py-3 font-semibold text-cream hover:bg-cream/10">
+        <a href={links.calculator} {...external} className="inline-flex items-center rounded-full border border-on-panel/30 px-5 py-3 font-semibold text-on-panel hover:bg-on-panel/10">
           {a.calculator} ↗
         </a>
       </div>
-      <p className="mt-3 text-xs text-cream/60">{a.source}</p>
+      <p className="mt-3 text-xs text-on-panel/60">{a.source}</p>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {a.facts.map((fact, i) => (
-          <article key={fact.title} className="rounded-2xl bg-cream/10 p-5">
+          <article key={fact.title} className="rounded-2xl bg-on-panel/10 p-5">
             <h4 className="flex items-center gap-2 font-bold">
-              <span aria-hidden>{fact.icon}</span> {fact.title}
+              {(() => {
+                const Icon = FACT_ICONS[i] ?? Info;
+                return <Icon aria-hidden className="h-5 w-5 shrink-0 text-brand-on-panel" />;
+              })()}
+              {fact.title}
             </h4>
-            <p className="mt-2 text-sm text-cream/80">{fact.text}</p>
+            <p className="mt-2 text-sm text-on-panel/80">{fact.text}</p>
             {fact.link && factUrls[i] && (
-              <a href={factUrls[i]} {...external} className="mt-3 inline-block text-sm font-semibold text-apricot hover:underline">
+              <a href={factUrls[i]} {...external} className="mt-3 inline-block text-sm font-semibold text-brand-on-panel hover:underline">
                 {fact.link} ↗
               </a>
             )}
@@ -163,11 +193,11 @@ function SchengenSection() {
 
       <div className="mt-8 grid gap-6 lg:grid-cols-2">
         <div>
-          <h4 className="font-bold">📄 {a.documentsTitle}</h4>
-          <ul className="mt-3 list-disc space-y-1.5 pl-5 text-sm text-cream/80">
+          <h4 className="flex items-center gap-2 font-bold"><FileText aria-hidden className="h-5 w-5 text-brand-on-panel" />{a.documentsTitle}</h4>
+          <ul className="mt-3 list-disc space-y-1.5 pl-5 text-sm text-on-panel/80">
             {a.documents.map((doc) => <li key={doc}>{doc}</li>)}
           </ul>
-          <a href={SCHENGEN_LINKS.photo} {...external} className="mt-3 inline-block text-sm font-semibold text-apricot hover:underline">
+          <a href={SCHENGEN_LINKS.photo} {...external} className="mt-3 inline-block text-sm font-semibold text-brand-on-panel hover:underline">
             {a.photoLink} ↗
           </a>
         </div>
@@ -175,29 +205,29 @@ function SchengenSection() {
           <h4 className="font-bold">🇪🇺 {a.countriesTitle}</h4>
           <ul className="mt-3 flex flex-wrap gap-2">
             {a.countries.map((country) => (
-              <li key={country} className="rounded-full bg-cream/10 px-3 py-1 text-sm">{country}</li>
+              <li key={country} className="rounded-full bg-on-panel/10 px-3 py-1 text-sm">{country}</li>
             ))}
           </ul>
-          <p className="mt-3 text-xs text-cream/60">{a.countriesNote}</p>
+          <p className="mt-3 text-xs text-on-panel/60">{a.countriesNote}</p>
         </div>
       </div>
 
-      <details className="mt-6 rounded-2xl bg-cream/10 p-5">
-        <summary className="cursor-pointer font-bold">🎟️ {a.freeTitle}</summary>
-        <ol className="mt-3 list-decimal space-y-1.5 pl-5 text-sm text-cream/80">
+      <details className="mt-6 rounded-2xl bg-on-panel/10 p-5">
+        <summary className="cursor-pointer font-bold"><Ticket aria-hidden className="mr-2 inline h-4 w-4 -translate-y-px text-brand-on-panel" />{a.freeTitle}</summary>
+        <ol className="mt-3 list-decimal space-y-1.5 pl-5 text-sm text-on-panel/80">
           {a.free.map((group) => <li key={group}>{group}</li>)}
         </ol>
-        <p className="mt-3 text-xs text-cream/60">{a.freeNote}</p>
+        <p className="mt-3 text-xs text-on-panel/60">{a.freeNote}</p>
       </details>
 
-      <details className="mt-3 rounded-2xl bg-cream/10 p-5">
-        <summary className="cursor-pointer font-bold">🧾 {a.purposeTitle}</summary>
-        <p className="mt-3 text-sm text-cream/70">{a.purposeText}</p>
+      <details className="mt-3 rounded-2xl bg-on-panel/10 p-5">
+        <summary className="cursor-pointer font-bold"><Receipt aria-hidden className="mr-2 inline h-4 w-4 -translate-y-px text-brand-on-panel" />{a.purposeTitle}</summary>
+        <p className="mt-3 text-sm text-on-panel/70">{a.purposeText}</p>
         <dl className="mt-3 space-y-3 text-sm">
           {a.purpose.map(({ who, doc }) => (
             <div key={who}>
               <dt className="font-semibold">{who}</dt>
-              <dd className="text-cream/80">{doc}</dd>
+              <dd className="text-on-panel/80">{doc}</dd>
             </div>
           ))}
         </dl>
@@ -221,13 +251,13 @@ function ExemptionChecker() {
     result === "ok"
       ? "bg-emerald-50 text-emerald-800"
       : result === "incomplete"
-        ? "bg-sand text-navy"
+        ? "bg-muted text-ink"
         : "bg-pomegranate text-white";
 
   return (
-    <div className="mt-8 rounded-2xl bg-cream/10 p-5">
-      <h4 className="font-bold">🧭 {t.visa.checker.title}</h4>
-      <p className="mt-1 text-sm text-cream/80">{t.visa.checker.text}</p>
+    <div className="mt-8 rounded-2xl bg-on-panel/10 p-5">
+      <h4 className="flex items-center gap-2 font-bold"><Compass aria-hidden className="h-5 w-5 text-brand-on-panel" />{t.visa.checker.title}</h4>
+      <p className="mt-1 text-sm text-on-panel/80">{t.visa.checker.text}</p>
       <form
         className="mt-5 grid gap-4 sm:grid-cols-[1fr_1fr_1fr_auto] sm:items-end"
         onSubmit={(e) => {
