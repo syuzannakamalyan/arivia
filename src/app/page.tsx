@@ -46,11 +46,11 @@ export default function Home() {
         </ul>
       </section>
 
-      {/* AI planner */}
+      {/* Trip planner */}
       <section id="planner" className="scroll-mt-20 border-y border-line bg-surface py-16">
         <div className="mx-auto grid max-w-6xl gap-8 px-4 sm:px-6 lg:grid-cols-2 lg:items-center">
           <div>
-            <h2 className="text-3xl font-bold">✨ {t.planner.teaser.title}</h2>
+            <h2 className="text-3xl font-bold">🗺️ {t.planner.teaser.title}</h2>
             <p className="mt-3 text-lg text-ink/70">{t.planner.teaser.text}</p>
             <Link href="/planner" className="btn-primary mt-6">{t.planner.teaser.cta}</Link>
           </div>

@@ -8,7 +8,7 @@ import { useLanguage } from "@/lib/i18n";
 // The main options, like the menu on trip.com: a list on the left on computers,
 // a row that scrolls sideways under the header on phones.
 export const OPTIONS = [
-  { key: "planner", href: "/planner", icon: "✨" },
+  { key: "planner", href: "/planner", icon: "🗺️" },
   { key: "hotels", href: "/hotels", icon: "🏨" },
   { key: "routes", href: "/routes", icon: "✈️" },
   { key: "cars", href: "/cars", icon: "🚗" },
