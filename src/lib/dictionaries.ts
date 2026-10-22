@@ -205,8 +205,10 @@ const hy = {
       ],
     },
     visiting: {
-      title: "Հայաստան այցելողների համար",
-      subtitle: "Մուտքի կանոններ օտարերկրյա քաղաքացիների համար։ Օգտակար է նաև, եթե հյուրեր ես հրավիրում Հայաստան։",
+      title: "Գալիս ես Հայաստա՞ն",
+      subtitle: "Մուտքի կանոններ օտարերկրյա քաղաքացիների համար",
+      text: "Ով կարող է գալ առանց վիզայի, ինչպես ստանալ էլեկտրոնային վիզա և որքան կարելի է մնալ։ Օգտակար է նաև, եթե հյուրեր ես հրավիրում Հայաստան։",
+      evisa: "Դիմել էլեկտրոնային վիզայի",
     },
     rules: {
       visaFree: {
@@ -485,8 +487,10 @@ const en: Dictionary = {
       ],
     },
     visiting: {
-      title: "Visiting Armenia",
-      subtitle: "Entry rules for foreign citizens. Also useful when you invite guests to Armenia.",
+      title: "Coming to Armenia?",
+      subtitle: "Entry rules for foreign citizens",
+      text: "Who can come without a visa, how to get an e-visa and how long you can stay. Also useful when you invite guests to Armenia.",
+      evisa: "Apply for an e-visa",
     },
     rules: {
       visaFree: {

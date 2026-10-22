@@ -58,78 +58,69 @@ export default function VisaGuidePage() {
   );
 }
 
-// Foreign visitors coming to Armenia, from the MFA visa page.
+// Foreign visitors coming to Armenia, from the MFA visa page. Same look as SchengenSection.
 function VisitorsSection() {
   const { t } = useLanguage();
+  const v = t.visa.visiting;
+  const external = { target: "_blank", rel: "noopener noreferrer" } as const;
 
   return (
-    <>
-      <section className="mt-8">
-        <h2 className="text-2xl font-bold">🇦🇲 {t.visa.visiting.title}</h2>
-        <p className="mt-1 text-navy/70">{t.visa.visiting.subtitle}</p>
-        <SourceLine />
-        <div className="mt-6 grid gap-4 sm:grid-cols-2">
-          {RULES.map(({ key, icon, urls }) => {
-            const rule = t.visa.rules[key];
-            return (
-              <article key={key} className="card p-5">
-                <h3 className="flex items-center gap-2 text-lg font-bold">
-                  <span aria-hidden>{icon}</span> {rule.title}
-                </h3>
-                <p className="mt-2 text-navy/75">{rule.text}</p>
-                {urls.length > 0 && (
-                  <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1">
-                    {urls.map((url, i) => (
-                      <a key={url} href={url} target="_blank" rel="noopener noreferrer" className="text-sm font-semibold text-apricot-dark hover:underline">
-                        {(rule.links as readonly string[])[i]} ↗
-                      </a>
-                    ))}
-                  </div>
-                )}
-              </article>
-            );
-          })}
-        </div>
-      </section>
+    <section className="mt-8 rounded-3xl bg-navy p-6 text-cream shadow-sm sm:p-8">
+      <h2 className="text-2xl font-bold">🇦🇲 {v.title}</h2>
+      <h3 className="mt-4 text-xl font-semibold text-apricot">{v.subtitle}</h3>
+      <p className="mt-2 max-w-3xl text-cream/80">{v.text}</p>
+      <div className="mt-5 flex flex-wrap gap-3">
+        <a href={MFA_VISA_URL} {...external} className="btn-primary">{t.visa.openSource} ↗</a>
+        <a href={LINKS.evisa} {...external} className="inline-flex items-center rounded-full border border-cream/30 px-5 py-3 font-semibold text-cream hover:bg-cream/10">
+          {v.evisa} ↗
+        </a>
+      </div>
+      <p className="mt-3 text-xs text-cream/60">{t.visa.source} · {t.visa.lastChecked}</p>
+
+      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {RULES.map(({ key, icon, urls }) => {
+          const rule = t.visa.rules[key];
+          return (
+            <article key={key} className="rounded-2xl bg-cream/10 p-5">
+              <h4 className="flex items-center gap-2 font-bold">
+                <span aria-hidden>{icon}</span> {rule.title}
+              </h4>
+              <p className="mt-2 text-sm text-cream/80">{rule.text}</p>
+              {urls.length > 0 && (
+                <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1">
+                  {urls.map((url, i) => (
+                    <a key={url} href={url} {...external} className="text-sm font-semibold text-apricot hover:underline">
+                      {(rule.links as readonly string[])[i]} ↗
+                    </a>
+                  ))}
+                </div>
+              )}
+            </article>
+          );
+        })}
+      </div>
 
       <ExemptionChecker />
 
-      {/* MFA contacts */}
-      <section className="card mt-12 p-6">
-        <h2 className="text-xl font-bold">{t.visa.contacts.title}</h2>
+      <details className="mt-3 rounded-2xl bg-cream/10 p-5">
+        <summary className="cursor-pointer font-bold">📞 {t.visa.contacts.title}</summary>
         <dl className="mt-4 grid gap-4 text-sm sm:grid-cols-3">
           <div>
             <dt className="font-semibold">Email</dt>
-            <dd><a href={`mailto:${CONTACTS.email}`} className="text-apricot-dark hover:underline">{CONTACTS.email}</a></dd>
-            <dd className="mt-1 text-navy/60">{t.visa.contacts.emailNote}</dd>
+            <dd><a href={`mailto:${CONTACTS.email}`} className="text-apricot hover:underline">{CONTACTS.email}</a></dd>
+            <dd className="mt-1 text-cream/60">{t.visa.contacts.emailNote}</dd>
           </div>
           <div>
             <dt className="font-semibold">{t.visa.contacts.entry}</dt>
-            {CONTACTS.entryPhones.map((phone) => <dd key={phone}>{phone}</dd>)}
+            {CONTACTS.entryPhones.map((phone) => <dd key={phone} className="text-cream/80">{phone}</dd>)}
           </div>
           <div>
             <dt className="font-semibold">{t.visa.contacts.invitations}</dt>
-            {CONTACTS.invitationPhones.map((phone) => <dd key={phone}>{phone}</dd>)}
+            {CONTACTS.invitationPhones.map((phone) => <dd key={phone} className="text-cream/80">{phone}</dd>)}
           </div>
         </dl>
-      </section>
-
-    </>
-  );
-}
-
-function SourceLine() {
-  const { t } = useLanguage();
-  return (
-    <p className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-navy/60">
-      <span>{t.visa.source}</span>
-      <span aria-hidden>·</span>
-      <span>{t.visa.lastChecked}</span>
-      <span aria-hidden>·</span>
-      <a href={MFA_VISA_URL} target="_blank" rel="noopener noreferrer" className="font-semibold text-apricot-dark hover:underline">
-        {t.visa.openSource} ↗
-      </a>
-    </p>
+      </details>
+    </section>
   );
 }
 
@@ -230,13 +221,13 @@ function ExemptionChecker() {
     result === "ok"
       ? "bg-emerald-50 text-emerald-800"
       : result === "incomplete"
-        ? "bg-sand/60 text-navy"
-        : "bg-pomegranate/10 text-pomegranate";
+        ? "bg-sand text-navy"
+        : "bg-pomegranate text-white";
 
   return (
-    <section className="card mt-12 p-6">
-      <h2 className="text-xl font-bold">🧭 {t.visa.checker.title}</h2>
-      <p className="mt-1 text-navy/70">{t.visa.checker.text}</p>
+    <div className="mt-8 rounded-2xl bg-cream/10 p-5">
+      <h4 className="font-bold">🧭 {t.visa.checker.title}</h4>
+      <p className="mt-1 text-sm text-cream/80">{t.visa.checker.text}</p>
       <form
         className="mt-5 grid gap-4 sm:grid-cols-[1fr_1fr_1fr_auto] sm:items-end"
         onSubmit={(e) => {
@@ -274,6 +265,6 @@ function ExemptionChecker() {
           )}
         </div>
       )}
-    </section>
+    </div>
   );
 }
