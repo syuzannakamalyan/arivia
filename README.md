@@ -1,4 +1,4 @@
-# Արիvia · Arivia
+# Arivia
 
 A trip planner for Armenian travellers: plan a trip from start to finish, with budgets in AMD. The site is in English for now; the Armenian texts are kept in `src/lib/dictionaries.ts` (switch back with `SITE_LANG` in `src/lib/i18n.tsx`).
 
