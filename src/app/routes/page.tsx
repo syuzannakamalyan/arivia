@@ -14,7 +14,8 @@ export default function RoutesPage() {
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [date, setDate] = useState("");
-  const [roundTrip, setRoundTrip] = useState(false);
+  // Round trip is the default; a checkbox switches to one way.
+  const [oneWay, setOneWay] = useState(false);
   const [returnDate, setReturnDate] = useState("");
   const [travellers, setTravellers] = useState(1);
   const [result, setResult] = useState<RouteResult | null>(null);
@@ -27,7 +28,7 @@ export default function RoutesPage() {
     e.preventDefault();
     setLoading(true);
     setError(false);
-    const back = roundTrip ? returnDate : undefined;
+    const back = oneWay ? undefined : returnDate;
     const res = await fetch("/api/routes", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -54,20 +55,11 @@ export default function RoutesPage() {
       <p className="mt-3 max-w-2xl text-lg text-navy/70">{r.subtitle}</p>
 
       <form onSubmit={submit} className="mt-8 rounded-3xl bg-navy p-5 text-cream shadow-sm sm:p-6">
-        <div role="group" className="mb-4 inline-grid grid-cols-2 gap-1 rounded-xl bg-cream/10 p-1">
-          {[false, true].map((on) => (
-            <button
-              key={String(on)}
-              type="button"
-              aria-pressed={roundTrip === on}
-              onClick={() => setRoundTrip(on)}
-              className={`rounded-lg px-4 py-2 text-sm font-semibold transition ${roundTrip === on ? "bg-cream text-navy" : "text-cream/80 hover:text-cream"}`}
-            >
-              {on ? r.roundTrip : r.oneWay}
-            </button>
-          ))}
-        </div>
-        <div className={`grid gap-3 lg:items-end ${roundTrip ? "lg:grid-cols-[1fr_auto_1fr_160px_160px_110px_auto]" : "lg:grid-cols-[1fr_auto_1fr_180px_120px_auto]"}`}>
+        <label className="mb-4 inline-flex cursor-pointer items-center gap-2 text-sm font-semibold">
+          <input type="checkbox" checked={oneWay} onChange={(e) => setOneWay(e.target.checked)} className="h-4 w-4 accent-apricot" />
+          {r.oneWay}
+        </label>
+        <div className={`grid gap-3 lg:items-end ${!oneWay ? "lg:grid-cols-[1fr_auto_1fr_160px_160px_110px_auto]" : "lg:grid-cols-[1fr_auto_1fr_180px_120px_auto]"}`}>
           <label className="block">
             <span className="mb-1 block text-sm font-semibold">{r.from}</span>
             <input className="input" value={from} placeholder={r.fromPlaceholder} onChange={(e) => setFrom(e.target.value)} required />
@@ -92,7 +84,7 @@ export default function RoutesPage() {
             <span className="mb-1 block text-sm font-semibold">{r.date}</span>
             <input className="input" type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
           </label>
-          {roundTrip && (
+          {!oneWay && (
             <label className="block">
               <span className="mb-1 block text-sm font-semibold">{r.returnDate}</span>
               <input className="input" type="date" value={returnDate} min={date || undefined} onChange={(e) => setReturnDate(e.target.value)} required />
