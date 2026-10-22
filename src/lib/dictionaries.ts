@@ -92,6 +92,10 @@ const hy = {
     lastChecked: "Վերջին ստուգումը՝ 21.10.2026",
     disclaimer: "Սա ուղեցույց է։ Վերջնական որոշումը կայացնում են ԱԳՆ-ն և դեսպանատունը։",
     openSource: "Բացել ԱԳՆ էջը",
+    tabs: {
+      citizens: "ՀՀ քաղաքացիներ",
+      visitors: "Հայաստան այցելողներ",
+    },
     abroad: {
       title: "Մեկնում ես արտասահմա՞ն",
       schengenTitle: "Շենգենյան վիզա ՀՀ քաղաքացիների համար",
@@ -202,7 +206,7 @@ const hy = {
     },
     visiting: {
       title: "Հայաստան այցելողների համար",
-      subtitle: "Օգտակար է, եթե հյուրեր ես հրավիրում կամ ճամփորդում ես օտարերկրացի ընկերների հետ։",
+      subtitle: "Մուտքի կանոններ օտարերկրյա քաղաքացիների համար։ Օգտակար է նաև, եթե հյուրեր ես հրավիրում Հայաստան։",
     },
     rules: {
       visaFree: {
@@ -365,6 +369,10 @@ const en: Dictionary = {
     lastChecked: "Last checked: 21 Oct 2026",
     disclaimer: "This is guidance only. The MFA and the embassy have the final say.",
     openSource: "Open the MFA page",
+    tabs: {
+      citizens: "Armenian citizens",
+      visitors: "Visitors to Armenia",
+    },
     abroad: {
       title: "Travelling abroad?",
       schengenTitle: "Schengen visa for Armenian citizens",
@@ -478,7 +486,7 @@ const en: Dictionary = {
     },
     visiting: {
       title: "Visiting Armenia",
-      subtitle: "Useful when you invite guests or travel with friends from abroad.",
+      subtitle: "Entry rules for foreign citizens. Also useful when you invite guests to Armenia.",
     },
     rules: {
       visaFree: {

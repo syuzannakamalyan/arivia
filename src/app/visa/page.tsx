@@ -14,22 +14,60 @@ const RULES = [
   { key: "laissezPasser", icon: "🇺🇳", urls: [] },
 ] as const;
 
+type Tab = "citizens" | "visitors";
+
 export default function VisaGuidePage() {
   const { t } = useLanguage();
+  const [tab, setTab] = useState<Tab>("citizens");
 
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-10 sm:px-6">
       <h1 className="text-3xl font-extrabold sm:text-4xl">{t.visa.title}</h1>
       <p className="mt-3 max-w-2xl text-lg text-navy/70">{t.visa.subtitle}</p>
-      <SourceLine />
 
-      {/* Armenians going abroad: Schengen visa */}
-      <SchengenSection />
+      <div role="tablist" aria-label={t.visa.title} className="mt-8 grid grid-cols-2 gap-1 rounded-2xl bg-sand/60 p-1 sm:inline-grid">
+        {(["citizens", "visitors"] as const).map((key) => (
+          <button
+            key={key}
+            role="tab"
+            id={`tab-${key}`}
+            aria-selected={tab === key}
+            aria-controls={`panel-${key}`}
+            onClick={() => setTab(key)}
+            className={`rounded-xl px-4 py-2.5 text-sm font-semibold transition sm:px-6 ${
+              tab === key ? "bg-navy text-cream shadow-sm" : "text-navy/70 hover:text-navy"
+            }`}
+          >
+            {t.visa.tabs[key]}
+          </button>
+        ))}
+      </div>
 
-      {/* Foreign visitors coming to Armenia */}
-      <section className="mt-12">
+      {tab === "citizens" ? (
+        <div role="tabpanel" id="panel-citizens" aria-labelledby="tab-citizens">
+          <SchengenSection />
+        </div>
+      ) : (
+        <div role="tabpanel" id="panel-visitors" aria-labelledby="tab-visitors">
+          <VisitorsSection />
+        </div>
+      )}
+
+      <p className="mt-6 text-sm text-navy/60">{t.visa.disclaimer}</p>
+    </div>
+  );
+}
+
+// Foreign visitors coming to Armenia, from the MFA visa page.
+function VisitorsSection() {
+  const { t } = useLanguage();
+
+  return (
+    <>
+      <section className="mt-8">
         <h2 className="text-2xl font-bold">🇦🇲 {t.visa.visiting.title}</h2>
         <p className="mt-1 text-navy/70">{t.visa.visiting.subtitle}</p>
+        <SourceLine />
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
           {RULES.map(({ key, icon, urls }) => {
             const rule = t.visa.rules[key];
@@ -76,8 +114,7 @@ export default function VisaGuidePage() {
         </dl>
       </section>
 
-      <p className="mt-6 text-sm text-navy/60">{t.visa.disclaimer}</p>
-    </div>
+    </>
   );
 }
 
