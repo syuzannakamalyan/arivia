@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useLanguage } from "@/lib/i18n";
-import { CONTACTS, EXEMPTION, LINKS, MFA_VISA_URL, checkExemption } from "@/data/visaRules";
+import { CONTACTS, EXEMPTION, LINKS, MFA_VISA_URL, SCHENGEN_LINKS, checkExemption } from "@/data/visaRules";
 
 // Each rule card and the links it shows, in the order of its dictionary link labels.
 const RULES = [
@@ -23,15 +23,8 @@ export default function VisaGuidePage() {
       <p className="mt-3 max-w-2xl text-lg text-navy/70">{t.visa.subtitle}</p>
       <SourceLine />
 
-      {/* Armenians going abroad */}
-      <section className="mt-8 rounded-3xl bg-navy p-6 text-cream shadow-sm">
-        <h2 className="text-2xl font-bold">✈️ {t.visa.abroad.title}</h2>
-        <p className="mt-3 text-cream/80">{t.visa.abroad.text}</p>
-        <a href={MFA_VISA_URL} target="_blank" rel="noopener noreferrer" className="btn-primary mt-5">
-          {t.visa.abroad.button} ↗
-        </a>
-        <p className="mt-3 text-xs text-cream/60">{t.visa.abroad.note}</p>
-      </section>
+      {/* Armenians going abroad: Schengen visa */}
+      <SchengenSection />
 
       {/* Foreign visitors coming to Armenia */}
       <section className="mt-12">
@@ -100,6 +93,88 @@ function SourceLine() {
         {t.visa.openSource} ↗
       </a>
     </p>
+  );
+}
+
+function SchengenSection() {
+  const { t, lang } = useLanguage();
+  const a = t.visa.abroad;
+  const links = SCHENGEN_LINKS[lang];
+  // Links for the fact cards, in the order of t.visa.abroad.facts.
+  const factUrls = [links.whereToApply, SCHENGEN_LINKS.agreement, "", "", "", "", links.calculator];
+  const external = { target: "_blank", rel: "noopener noreferrer" } as const;
+
+  return (
+    <section className="mt-8 rounded-3xl bg-navy p-6 text-cream shadow-sm sm:p-8">
+      <h2 className="text-2xl font-bold">✈️ {a.title}</h2>
+      <h3 className="mt-4 text-xl font-semibold text-apricot">{a.schengenTitle}</h3>
+      <p className="mt-2 max-w-3xl text-cream/80">{a.text}</p>
+      <div className="mt-5 flex flex-wrap gap-3">
+        <a href={links.page} {...external} className="btn-primary">{a.button} ↗</a>
+        <a href={links.calculator} {...external} className="inline-flex items-center rounded-full border border-cream/30 px-5 py-3 font-semibold text-cream hover:bg-cream/10">
+          {a.calculator} ↗
+        </a>
+      </div>
+      <p className="mt-3 text-xs text-cream/60">{a.source}</p>
+
+      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {a.facts.map((fact, i) => (
+          <article key={fact.title} className="rounded-2xl bg-cream/10 p-5">
+            <h4 className="flex items-center gap-2 font-bold">
+              <span aria-hidden>{fact.icon}</span> {fact.title}
+            </h4>
+            <p className="mt-2 text-sm text-cream/80">{fact.text}</p>
+            {fact.link && factUrls[i] && (
+              <a href={factUrls[i]} {...external} className="mt-3 inline-block text-sm font-semibold text-apricot hover:underline">
+                {fact.link} ↗
+              </a>
+            )}
+          </article>
+        ))}
+      </div>
+
+      <div className="mt-8 grid gap-6 lg:grid-cols-2">
+        <div>
+          <h4 className="font-bold">📄 {a.documentsTitle}</h4>
+          <ul className="mt-3 list-disc space-y-1.5 pl-5 text-sm text-cream/80">
+            {a.documents.map((doc) => <li key={doc}>{doc}</li>)}
+          </ul>
+          <a href={SCHENGEN_LINKS.photo} {...external} className="mt-3 inline-block text-sm font-semibold text-apricot hover:underline">
+            {a.photoLink} ↗
+          </a>
+        </div>
+        <div>
+          <h4 className="font-bold">🇪🇺 {a.countriesTitle}</h4>
+          <ul className="mt-3 flex flex-wrap gap-2">
+            {a.countries.map((country) => (
+              <li key={country} className="rounded-full bg-cream/10 px-3 py-1 text-sm">{country}</li>
+            ))}
+          </ul>
+          <p className="mt-3 text-xs text-cream/60">{a.countriesNote}</p>
+        </div>
+      </div>
+
+      <details className="mt-6 rounded-2xl bg-cream/10 p-5">
+        <summary className="cursor-pointer font-bold">🎟️ {a.freeTitle}</summary>
+        <ol className="mt-3 list-decimal space-y-1.5 pl-5 text-sm text-cream/80">
+          {a.free.map((group) => <li key={group}>{group}</li>)}
+        </ol>
+        <p className="mt-3 text-xs text-cream/60">{a.freeNote}</p>
+      </details>
+
+      <details className="mt-3 rounded-2xl bg-cream/10 p-5">
+        <summary className="cursor-pointer font-bold">🧾 {a.purposeTitle}</summary>
+        <p className="mt-3 text-sm text-cream/70">{a.purposeText}</p>
+        <dl className="mt-3 space-y-3 text-sm">
+          {a.purpose.map(({ who, doc }) => (
+            <div key={who}>
+              <dt className="font-semibold">{who}</dt>
+              <dd className="text-cream/80">{doc}</dd>
+            </div>
+          ))}
+        </dl>
+      </details>
+    </section>
   );
 }
 

@@ -38,3 +38,21 @@ export function checkExemption(permitFrom: string, entryDate: string, permitExpi
   needed.setMonth(needed.getMonth() + EXEMPTION.minPermitMonths);
   return new Date(permitExpiry) >= needed ? "ok" : "tooShort";
 }
+
+// Schengen facts from the embassy.am page Syuzanna shared on 22 Oct 2026
+// (Armenian at /am/..., English at the same path without /am).
+export const SCHENGEN_LINKS = {
+  hy: {
+    page: "https://www.embassy.am/am/visa/schengen",
+    whereToApply: "https://www.embassy.am/am/visa",
+    calculator: "https://www.embassy.am/am/tools/schengen-calculator",
+  },
+  en: {
+    page: "https://www.embassy.am/visa/schengen",
+    whereToApply: "https://www.embassy.am/visa",
+    calculator: "https://www.embassy.am/tools/schengen-calculator",
+  },
+  agreement: "http://eur-lex.europa.eu/legal-content/EN/ALL/?uri=CELEX:22013A1031(01)",
+  photo:
+    "https://ec.europa.eu/home-affairs/sites/homeaffairs/files/what-we-do/policies/borders-and-visas/visa-policy/docs/icao_photograph_guidelines_en.pdf",
+};
