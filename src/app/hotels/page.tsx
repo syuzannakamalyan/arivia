@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense, useCallback, useState } from "react";
+import LoadingResults from "@/components/LoadingResults";
 import QueryPrefill from "@/components/QueryPrefill";
 import { useLanguage } from "@/lib/i18n";
 import { bookingComUrl, googleHotelsUrl, hotelLinks, type HotelSearch } from "@/lib/hotels/links";
@@ -97,7 +98,9 @@ export default function HotelsPage() {
       {error && <p role="alert" className="mt-3 rounded-xl bg-pomegranate px-3 py-2 text-sm text-white">{h.error}</p>}
 
       <section aria-live="polite" className="mt-8">
-        {!result || !searched ? (
+        {loading ? (
+          <LoadingResults cards={4} />
+        ) : !result || !searched ? (
           <div className="flex min-h-48 items-center justify-center rounded-2xl border-2 border-dashed border-line p-8 text-center text-ink/60">
             {h.empty}
           </div>

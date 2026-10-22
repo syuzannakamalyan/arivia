@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense, useCallback, useState } from "react";
+import LoadingResults from "@/components/LoadingResults";
 import QueryPrefill from "@/components/QueryPrefill";
 import { useLanguage } from "@/lib/i18n";
 import { bookingLinks, searchLinks } from "@/lib/routes/links";
@@ -128,7 +129,9 @@ export default function RoutesPage() {
       {error && <p role="alert" className="mt-3 rounded-xl bg-pomegranate px-3 py-2 text-sm text-white">{r.error}</p>}
 
       <section aria-live="polite" className="mt-8">
-        {!result || !searched ? (
+        {loading ? (
+          <LoadingResults />
+        ) : !result || !searched ? (
           <div className="flex min-h-48 items-center justify-center rounded-3xl border-2 border-dashed border-line p-8 text-center text-ink/60">
             {r.empty}
           </div>

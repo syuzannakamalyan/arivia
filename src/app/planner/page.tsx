@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense, useCallback, useState } from "react";
+import LoadingResults from "@/components/LoadingResults";
 import QueryPrefill from "@/components/QueryPrefill";
 import { useLanguage } from "@/lib/i18n";
 import type { PlanResult } from "@/lib/planner";
@@ -133,7 +134,9 @@ export default function PlannerPage() {
 
         {/* The plan */}
         <section aria-live="polite">
-          {!result ? (
+          {loading ? (
+            <LoadingResults />
+          ) : !result ? (
             <div className="flex min-h-64 items-center justify-center rounded-3xl border-2 border-dashed border-line p-8 text-center text-ink/60">
               {p.result.empty}
             </div>

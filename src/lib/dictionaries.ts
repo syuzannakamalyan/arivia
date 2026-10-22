@@ -16,6 +16,7 @@ const hy = {
     visa: "Վիզաներ",
   },
   theme: { dark: "Միացնել մութ ռեժիմը", light: "Միացնել լուսավոր ռեժիմը" },
+  loadingNote: "AI-ը փնտրում է լավագույն տարբերակները…",
   home: {
     title: "Ու՞ր ենք գնում",
     subtitle: "Պլանավորիր ճամփորդությունդ Հայաստանից՝ երթուղի, հյուրանոց, վիզա և օր առ օր պլան մեկ տեղում։",
@@ -395,6 +396,7 @@ const en: Dictionary = {
     visa: "Visas",
   },
   theme: { dark: "Switch to dark mode", light: "Switch to light mode" },
+  loadingNote: "The AI is finding the best options…",
   home: {
     title: "Where to next?",
     subtitle: "Plan your trip from Armenia: routes, hotels, visas and a day-by-day plan in one place.",
