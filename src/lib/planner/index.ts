@@ -18,5 +18,12 @@ export async function generatePlan(request: TripRequest): Promise<PlanResult> {
       return { plan: generateSamplePlan(request), source: "sample", reason: "aiFailed", detail };
     }
   }
-  return { plan: generateSamplePlan(request), source: "sample", reason: "noKey" };
+  return { plan: generateSamplePlan(request), source: "sample", reason: "noKey", detail: keyHint() };
+}
+
+// Helps find a misnamed key: which deployment this is and any env var names that look like it (names only, never values).
+function keyHint() {
+  const similar = Object.keys(process.env).filter((name) => /gemini|api_?key/i.test(name));
+  const where = [process.env.VERCEL_ENV, process.env.VERCEL_GIT_COMMIT_REF].filter(Boolean).join(", ") || "local";
+  return `${where}; similar names: ${similar.length ? similar.join(", ") : "none"}`;
 }
