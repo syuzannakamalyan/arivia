@@ -7,6 +7,7 @@ export type RouteRequest = {
   from: string;
   to: string;
   date: string; // YYYY-MM-DD
+  returnDate?: string; // YYYY-MM-DD, only for a round trip
   travellers: number;
   lang: "hy" | "en";
 };
@@ -16,9 +17,9 @@ export type RouteOption = {
   title: string; // e.g. "Direct flight Yerevan – Rome"
   durationMinutes: number;
   transfers: number;
-  priceAmdMin: number; // for all travellers
+  priceAmdMin: number; // for all travellers, both ways on a round trip
   priceAmdMax: number;
-  steps: string[]; // the legs, in order
+  steps: string[]; // the legs, in order (outbound, then return on a round trip)
   note: string; // carriers, how often it runs, tips
 };
 

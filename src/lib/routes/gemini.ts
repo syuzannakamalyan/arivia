@@ -27,18 +27,22 @@ const ROUTES_SCHEMA = {
   required: ["options"],
 };
 
-function prompt({ from, to, date, travellers, lang }: RouteRequest) {
+function prompt({ from, to, date, returnDate, travellers, lang }: RouteRequest) {
   const language = lang === "hy" ? "Eastern Armenian (Armenian script)" : "English";
+  const trip = returnDate ? `a round trip, leaving on ${date} and coming back on ${returnDate}` : `one way on ${date}`;
+  const legs = returnDate
+    ? "steps lists the outbound legs, then the return legs, in order"
+    : "steps lists each leg in order";
   return `You are Arivia, a travel planner for people living in Armenia.
-List the realistic ways to travel from "${from}" to "${to}" on ${date} for ${travellers} traveller(s).
+List the realistic ways to travel from "${from}" to "${to}", ${trip}, for ${travellers} traveller(s).
 
 Rules:
 - Give 2 to 5 options, ordered from most to least practical. Only include modes that really exist on this route
   (for example, no train or car if there is no land connection that works).
 - For flights, mention real airports and typical airlines, and whether connections are usually needed.
-- durationMinutes is the typical door-to-door travel time; transfers is the number of changes.
-- priceAmdMin and priceAmdMax are a typical price range in Armenian dram for all ${travellers} traveller(s), one way.
-- steps lists each leg in order, for example "Yerevan (EVN) → Vienna (VIE), Austrian Airlines, ~4h".
+- durationMinutes is the typical door-to-door travel time one way; transfers is the number of changes one way.
+- priceAmdMin and priceAmdMax are a typical price range in Armenian dram for all ${travellers} traveller(s), ${returnDate ? "for both directions together" : "one way"}.
+- ${legs}, for example "Yerevan (EVN) → Vienna (VIE), Austrian Airlines, ~4h".
 - note is one sentence: how often it runs, the best time to book, or a useful tip.
 - These are estimates; never claim live prices or exact timetables.
 - Write title, steps and note in ${language}. Keep "mode" in English.`;

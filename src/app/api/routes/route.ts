@@ -13,10 +13,12 @@ export async function POST(req: Request) {
     from: String(body.from ?? "").trim().slice(0, 80),
     to: String(body.to ?? "").trim().slice(0, 80),
     date: String(body.date ?? ""),
+    returnDate: body.returnDate ? String(body.returnDate) : undefined,
     travellers: Math.min(Math.max(Number(body.travellers) || 1, 1), 20),
     lang: body.lang === "en" ? "en" : "hy",
   };
-  if (!request.from || !request.to || Number.isNaN(Date.parse(request.date))) {
+  const badReturn = request.returnDate !== undefined && !(Date.parse(request.returnDate) >= Date.parse(request.date));
+  if (!request.from || !request.to || Number.isNaN(Date.parse(request.date)) || badReturn) {
     return Response.json({ error: "invalid" }, { status: 400 });
   }
 
