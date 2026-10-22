@@ -4,7 +4,6 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useState } from "react";
 import { useLanguage } from "@/lib/i18n";
-import { useAuth } from "@/lib/auth";
 import { WONDERS, type Wonder } from "@/data/wonders";
 
 // The globe uses WebGL, so it only loads in the browser.
@@ -14,9 +13,7 @@ const FEATURE_ICONS = ["✨", "֏", "🛂", "🏨"];
 
 export default function Home() {
   const { t, lang } = useLanguage();
-  const { user } = useAuth();
   const [selected, setSelected] = useState<Wonder | null>(null);
-  const startHref = user ? "/profile" : "/signup";
 
   return (
     <>
@@ -30,19 +27,19 @@ export default function Home() {
             <h1 className="mt-4 text-4xl leading-tight font-extrabold sm:text-5xl">{t.hero.title}</h1>
             <p className="mt-4 max-w-xl text-lg text-navy/70">{t.hero.subtitle}</p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link href={startHref} className="btn-primary">{t.hero.cta}</Link>
+              <a href="#wonders" className="btn-primary">{t.hero.cta}</a>
               <a href="#features" className="btn-secondary">{t.hero.secondary}</a>
             </div>
           </div>
 
           <div className="relative aspect-square w-full max-w-[560px] min-w-0 justify-self-center overflow-hidden">
             <WonderGlobe selected={selected} onSelect={setSelected} lang={lang} />
-            {selected && <WonderCard wonder={selected} startHref={startHref} onClose={() => setSelected(null)} />}
+            {selected && <WonderCard wonder={selected} onClose={() => setSelected(null)} />}
           </div>
         </div>
 
         {/* Wonder list, in two colors like the pins */}
-        <div className="mx-auto max-w-6xl px-4 pb-16 sm:px-6">
+        <div id="wonders" className="mx-auto max-w-6xl scroll-mt-20 px-4 pb-16 sm:px-6">
           <h2 className="text-2xl font-bold">{t.globe.title}</h2>
           <p className="mt-1 text-navy/70">{t.globe.subtitle}</p>
           <div className="mt-6 grid gap-6 md:grid-cols-2">
@@ -144,14 +141,14 @@ export default function Home() {
       <section className="py-16">
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
           <h2 className="text-3xl font-extrabold sm:text-4xl">{t.footer.tagline}</h2>
-          <Link href={startHref} className="btn-primary mt-6">{t.hero.cta}</Link>
+          <Link href="/visa" className="btn-primary mt-6">{t.visa.title}</Link>
         </div>
       </section>
     </>
   );
 }
 
-function WonderCard({ wonder, startHref, onClose }: { wonder: Wonder; startHref: string; onClose: () => void }) {
+function WonderCard({ wonder, onClose }: { wonder: Wonder; onClose: () => void }) {
   const { t, lang } = useLanguage();
   return (
     <div className="card absolute right-2 bottom-2 left-2 p-4 sm:left-auto sm:w-72">
@@ -162,7 +159,6 @@ function WonderCard({ wonder, startHref, onClose }: { wonder: Wonder; startHref:
       <p className="mt-1 text-lg font-bold">{wonder.name[lang]}</p>
       <p className="text-sm text-navy/60">{wonder.place[lang]}</p>
       <p className="mt-2 text-xs text-navy/50">{wonder.standing ? t.globe.standing : t.globe.lost}</p>
-      <Link href={startHref} className="btn-primary mt-3 w-full !py-2 text-sm">{t.globe.plan}</Link>
     </div>
   );
 }

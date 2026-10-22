@@ -1,12 +1,8 @@
 "use client";
 
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { backend, useAuth, type Visa } from "@/lib/auth";
+import { useState } from "react";
 import { useLanguage } from "@/lib/i18n";
-import { countryName } from "@/data/countries";
 import { CONTACTS, EXEMPTION, LINKS, MFA_VISA_URL, checkExemption } from "@/data/visaRules";
-import VisaBadge from "@/components/VisaBadge";
 
 // Each rule card and the links it shows, in the order of its dictionary link labels.
 const RULES = [
@@ -28,17 +24,14 @@ export default function VisaGuidePage() {
       <SourceLine />
 
       {/* Armenians going abroad */}
-      <div className="mt-8 grid gap-6 md:grid-cols-[3fr_2fr]">
-        <section className="rounded-3xl bg-navy p-6 text-cream shadow-sm">
-          <h2 className="text-2xl font-bold">✈️ {t.visa.abroad.title}</h2>
-          <p className="mt-3 text-cream/80">{t.visa.abroad.text}</p>
-          <a href={MFA_VISA_URL} target="_blank" rel="noopener noreferrer" className="btn-primary mt-5">
-            {t.visa.abroad.button} ↗
-          </a>
-          <p className="mt-3 text-xs text-cream/60">{t.visa.abroad.note}</p>
-        </section>
-        <MyVisas />
-      </div>
+      <section className="mt-8 rounded-3xl bg-navy p-6 text-cream shadow-sm">
+        <h2 className="text-2xl font-bold">✈️ {t.visa.abroad.title}</h2>
+        <p className="mt-3 text-cream/80">{t.visa.abroad.text}</p>
+        <a href={MFA_VISA_URL} target="_blank" rel="noopener noreferrer" className="btn-primary mt-5">
+          {t.visa.abroad.button} ↗
+        </a>
+        <p className="mt-3 text-xs text-cream/60">{t.visa.abroad.note}</p>
+      </section>
 
       {/* Foreign visitors coming to Armenia */}
       <section className="mt-12">
@@ -107,50 +100,6 @@ function SourceLine() {
         {t.visa.openSource} ↗
       </a>
     </p>
-  );
-}
-
-// The visas the signed-in person saved in their profile, with their status.
-function MyVisas() {
-  const { t, lang } = useLanguage();
-  const { user, loading } = useAuth();
-  const [visas, setVisas] = useState<Visa[] | null>(null);
-
-  useEffect(() => {
-    if (user) backend.getProfile(user).then((p) => setVisas(p.visas));
-  }, [user]);
-
-  return (
-    <section className="card p-6">
-      <h2 className="text-xl font-bold">{t.visa.mine.title}</h2>
-      {loading ? null : !user ? (
-        <>
-          <p className="mt-2 text-sm text-navy/60">{t.visa.mine.signIn}</p>
-          <Link href="/signin" className="btn-secondary mt-4 !py-2 text-sm">{t.nav.signIn}</Link>
-        </>
-      ) : (
-        <>
-          {visas && visas.length === 0 && <p className="mt-2 text-sm text-navy/60">{t.visa.mine.empty}</p>}
-          <ul className="mt-3 space-y-2">
-            {visas?.map((visa) => (
-              <li key={visa.id} className="flex items-center justify-between gap-3 rounded-2xl bg-cream px-4 py-3">
-                <div>
-                  <p className="font-semibold">{visa.country ? countryName(visa.country, lang) : "—"}</p>
-                  <p className="text-xs text-navy/60">
-                    {t.profile.visaTypes[visa.type as keyof typeof t.profile.visaTypes] ?? visa.type}
-                    {visa.expiry && ` · ${t.profile.visaExpiry} ${visa.expiry}`}
-                  </p>
-                </div>
-                <VisaBadge expiry={visa.expiry} />
-              </li>
-            ))}
-          </ul>
-          <Link href="/profile" className="mt-4 inline-block text-sm font-semibold text-apricot-dark hover:underline">
-            {t.visa.mine.manage} →
-          </Link>
-        </>
-      )}
-    </section>
   );
 }
 

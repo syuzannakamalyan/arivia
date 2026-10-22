@@ -4,7 +4,6 @@ import "./globals.css";
 import Providers from "@/components/Providers";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import DemoBanner from "@/components/DemoBanner";
 
 const armenian = Noto_Sans_Armenian({ variable: "--font-armenian", subsets: ["armenian"] });
 const latin = Noto_Sans({ variable: "--font-latin", subsets: ["latin"] });
@@ -19,7 +18,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="hy" className={`${armenian.variable} ${latin.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">
         <Providers>
-          <DemoBanner />
           <Header />
           <main className="flex flex-1 flex-col">{children}</main>
           <Footer />

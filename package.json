@@ -9,7 +9,6 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.118.0",
     "globe.gl": "^2.46.2",
     "next": "16.4.2",
     "react": "19.3.0",
