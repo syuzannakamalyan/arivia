@@ -3,10 +3,12 @@
 // GEMINI_MODEL can put a model first in the list.
 
 // Tried in order. A retired model (404) or a busy one (429/500/503, after one retry) falls through to the next.
-// "gemini-flash-latest" always points at Google's current Flash model; Flash-Lite is the lighter backup.
+// "gemini-flash-latest" always points at Google's current Flash model; Flash-Lite is the lighter, faster one.
 const MODELS = ["gemini-flash-latest", "gemini-3.8-flash", "gemini-flash-lite-latest"];
+// Lists people wait for (hotels, routes) start with Flash-Lite, which answers in a few seconds.
+const FAST_MODELS = ["gemini-flash-lite-latest", "gemini-flash-latest", "gemini-3.8-flash"];
 const SKIP = [404, 429, 500, 503];
-const DEADLINE_MS = 50_000; // stay under the routes' 60 s limit
+const DEADLINE_MS = 45_000; // stay well under the API routes' 60 s limit
 
 // Flash models "think" before answering by default, which makes answers several times slower.
 // These lists don't need it, so thinking is turned off. If a model rejects the setting (400),
@@ -17,11 +19,12 @@ const NO_THINKING = { thinkingConfig: { thinkingBudget: 0 } };
 const CACHE_MS = 60 * 60 * 1000;
 const cache = new Map<string, { at: number; value: unknown }>();
 
-export async function callGeminiJson(prompt: string, schema: object, apiKey: string): Promise<unknown> {
+export async function callGeminiJson(prompt: string, schema: object, apiKey: string, { quick = false } = {}): Promise<unknown> {
   const saved = cache.get(prompt);
   if (saved && Date.now() - saved.at < CACHE_MS) return saved.value;
 
-  const models = process.env.GEMINI_MODEL ? [process.env.GEMINI_MODEL, ...MODELS] : MODELS;
+  const list = quick ? FAST_MODELS : MODELS;
+  const models = process.env.GEMINI_MODEL ? [process.env.GEMINI_MODEL, ...list] : list;
   const body = (fast: boolean) =>
     JSON.stringify({
       contents: [{ role: "user", parts: [{ text: prompt }] }],

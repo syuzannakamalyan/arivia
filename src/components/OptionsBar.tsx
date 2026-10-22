@@ -13,8 +13,6 @@ export const OPTIONS = [
   { key: "routes", href: "/routes", icon: "✈️" },
   { key: "cars", href: "/cars", icon: "🚗" },
   { key: "tours", href: "/tours", icon: "🎟️" },
-  { key: "privateTours", href: "/private-tours", icon: "🧑‍🏫" },
-  { key: "groupTours", href: "/group-tours", icon: "👥" },
   { key: "cruises", href: "/cruises", icon: "🚢" },
   { key: "esim", href: "/esim", icon: "📶" },
   { key: "visa", href: "/visa", icon: "🛂" },

@@ -24,11 +24,12 @@ export default function RoutesPage() {
   // The search the result belongs to, for the booking links.
   const [searched, setSearched] = useState<Pick<RouteRequest, "from" | "to" | "date" | "returnDate"> | null>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  // The form was wrong (400), or the search failed on the way (other code, 0 = no connection).
+  const [error, setError] = useState<number | null>(null);
 
   async function search(request: Omit<RouteRequest, "lang">) {
     setLoading(true);
-    setError(false);
+    setError(null);
     const res = await fetch("/api/routes", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -36,7 +37,7 @@ export default function RoutesPage() {
     }).catch(() => null);
     setLoading(false);
     if (!res?.ok) {
-      setError(true);
+      setError(res?.status ?? 0);
       return;
     }
     setResult(await res.json());
@@ -126,7 +127,11 @@ export default function RoutesPage() {
           </button>
         </div>
       </form>
-      {error && <p role="alert" className="mt-3 rounded-xl bg-pomegranate px-3 py-2 text-sm text-white">{r.error}</p>}
+      {error !== null && (
+        <p role="alert" className="mt-3 rounded-xl bg-pomegranate px-3 py-2 text-sm text-white">
+          {error === 400 ? r.error : t.serverError.replace("{code}", String(error))}
+        </p>
+      )}
 
       <section aria-live="polite" className="mt-8">
         {loading ? (

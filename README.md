@@ -5,8 +5,8 @@ A trip planner for Armenian travellers: plan a trip from start to finish, with b
 This first version has no accounts, so anyone can open every page:
 
 - **Home page** (`/`): a search box with one tab per option (AI planner, flights & trains, hotels, visas) that opens the option's page filled in, popular destinations from Yerevan, a spinning 3D globe with the New 7 Wonders (apricot pins) and the Ancient 7 Wonders (pomegranate pins), and FAQ.
-- **Options menu** on the left, like trip.com (a sideways row under the header on phones): AI planner, Hotels, Flights & trains, Cars, Attractions & tours, Private tours, Group tours, Cruises, eSIM, Visas.
-- **Cars, tours, cruises and eSIM** (`/cars`, `/tours`, `/private-tours`, `/group-tours`, `/cruises`, `/esim`): a short form that opens the search on partner sites (Kayak, Kiwitaxi, GetYourGuide, Viator, Airalo and others). Cars has two tabs: car rental and airport transfer.
+- **Options menu** on the left, like trip.com (a sideways row under the header on phones): AI planner, Hotels, Flights & trains, Cars, Attractions & tours, Cruises, eSIM, Visas.
+- **Cars, tours, cruises and eSIM** (`/cars`, `/tours`, `/cruises`, `/esim`): a short form that opens the search on partner sites (Kayak, Kiwitaxi, GetYourGuide, Viator, Airalo and others). Cars has two tabs: car rental and airport transfer. Attractions & tours has a dropdown for all tours, private tours or group tours.
 - **Visa guide** (`/visa`): where Armenian passport holders need a visa (link to the MFA lookup), the MFA rules for visiting Armenia, a residence-permit exemption checker and MFA contacts.
 - **AI planner** (`/planner`): destination, dates, travellers, budget in AMD, interests and pace in; a day-by-day plan with costs, a budget split and tips out.
 - **Route planner** (`/routes`): from, to, round trip by default (a One way checkbox drops the return date) and travellers in; flight, train, bus, car or ferry options with time, price estimates in AMD and links to Omio, Google Flights, Rome2rio or Google Maps.

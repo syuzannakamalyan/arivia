@@ -22,11 +22,12 @@ export default function HotelsPage() {
   // The search the list belongs to, for the booking links.
   const [searched, setSearched] = useState<HotelSearch | null>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  // The form was wrong (400), or the search failed on the way (other code, 0 = no connection).
+  const [error, setError] = useState<number | null>(null);
 
   async function search(request: Omit<HotelRequest, "lang">) {
     setLoading(true);
-    setError(false);
+    setError(null);
     const res = await fetch("/api/hotels", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -34,7 +35,7 @@ export default function HotelsPage() {
     }).catch(() => null);
     setLoading(false);
     if (!res?.ok) {
-      setError(true);
+      setError(res?.status ?? 0);
       return;
     }
     setResult(await res.json());
@@ -95,7 +96,11 @@ export default function HotelsPage() {
           {loading ? h.loading : h.submit}
         </button>
       </form>
-      {error && <p role="alert" className="mt-3 rounded-xl bg-pomegranate px-3 py-2 text-sm text-white">{h.error}</p>}
+      {error !== null && (
+        <p role="alert" className="mt-3 rounded-xl bg-pomegranate px-3 py-2 text-sm text-white">
+          {error === 400 ? h.error : t.serverError.replace("{code}", String(error))}
+        </p>
+      )}
 
       <section aria-live="polite" className="mt-8">
         {loading ? (

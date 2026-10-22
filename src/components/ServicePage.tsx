@@ -2,13 +2,11 @@
 
 import { useState } from "react";
 import { useLanguage } from "@/lib/i18n";
-import { SERVICES, type ServiceField, type ServiceKey, type ServiceValues } from "@/data/services";
+import { SERVICES, TOUR_TYPES, type ServiceField, type ServiceKey, type ServiceValues, type TourType } from "@/data/services";
 
 const ICONS: Record<ServiceKey, string> = {
   cars: "🚗",
   tours: "🎟️",
-  privateTours: "🧑‍🏫",
-  groupTours: "👥",
   cruises: "🚢",
   esim: "📶",
 };
@@ -23,7 +21,7 @@ export default function ServicePage({ service }: { service: ServiceKey }) {
 
   const [modeIndex, setModeIndex] = useState(0);
   const mode = modes[modeIndex];
-  const [values, setValues] = useState<ServiceValues>({ place: "", to: "", start: "", end: "", people: 2 });
+  const [values, setValues] = useState<ServiceValues>({ place: "", to: "", start: "", end: "", people: 2, tourType: "all" });
   const set = (key: keyof ServiceValues) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setValues((v) => ({ ...v, [key]: key === "people" ? Number(e.target.value) : e.target.value }));
 
@@ -32,7 +30,7 @@ export default function ServicePage({ service }: { service: ServiceKey }) {
     if (field === "dates") return values.start && values.end;
     if (field === "date") return values.start;
     if (field === "address") return values.to.trim();
-    if (field === "people") return true;
+    if (field === "people" || field === "tourType") return true;
     return values.place.trim();
   });
 
@@ -62,6 +60,20 @@ export default function ServicePage({ service }: { service: ServiceKey }) {
     port: () => text(f.port, f.portPlaceholder, "place"),
     dates: () => [date(f.start, "start"), date(f.end, "end", values.start)],
     date: () => date(f.date, "start"),
+    tourType: () => (
+      <label key="tourType" className="block min-w-0">
+        <span className="mb-1 block text-sm font-semibold">{f.tourType}</span>
+        <select
+          className="input"
+          value={values.tourType}
+          onChange={(e) => setValues((v) => ({ ...v, tourType: e.target.value as TourType }))}
+        >
+          {TOUR_TYPES.map((type) => (
+            <option key={type} value={type}>{f.tourTypes[type]}</option>
+          ))}
+        </select>
+      </label>
+    ),
     people: () => (
       <label key="people" className="block min-w-0">
         <span className="mb-1 block text-sm font-semibold">{f.people}</span>

@@ -2,8 +2,10 @@
 // Each mode lists the form fields it needs and the partner searches it opens.
 // Partner deep links with Arivia's affiliate ids can replace these once Arivia joins the programmes.
 
-export type ServiceField = "destination" | "pickUp" | "airport" | "address" | "country" | "port" | "dates" | "date" | "people";
-export type ServiceValues = { place: string; to: string; start: string; end: string; people: number };
+export type ServiceField = "destination" | "tourType" | "pickUp" | "airport" | "address" | "country" | "port" | "dates" | "date" | "people";
+export const TOUR_TYPES = ["all", "private", "group"] as const;
+export type TourType = (typeof TOUR_TYPES)[number];
+export type ServiceValues = { place: string; to: string; start: string; end: string; people: number; tourType: TourType };
 export type PartnerLink = { name: string; url: string };
 
 export type ServiceMode = {
@@ -41,22 +43,11 @@ export const SERVICES = {
   tours: [
     {
       key: "default",
-      fields: ["destination", "dates"],
-      partners: (v) => [getYourGuide(v.place), viator(v.place)],
-    },
-  ],
-  privateTours: [
-    {
-      key: "default",
-      fields: ["destination", "dates", "people"],
-      partners: (v) => [getYourGuide(`private tour ${v.place}`), viator(`private tour ${v.place}`)],
-    },
-  ],
-  groupTours: [
-    {
-      key: "default",
-      fields: ["destination", "dates"],
-      partners: (v) => [getYourGuide(`group tour ${v.place}`), viator(`group tour ${v.place}`)],
+      fields: ["destination", "tourType", "dates", "people"],
+      partners: (v) => {
+        const q = { all: v.place, private: `private tour ${v.place}`, group: `group tour ${v.place}` }[v.tourType];
+        return [getYourGuide(q), viator(q)];
+      },
     },
   ],
   cruises: [

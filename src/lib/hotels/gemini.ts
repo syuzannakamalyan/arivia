@@ -32,7 +32,7 @@ function prompt({ destination, checkIn, checkOut, guests, budgetAmd, lang }: Hot
     ? `- Only include hotels whose typical price is at most ${budgetAmd} AMD per night for the room.`
     : "- Mix price levels: some budget, some mid-range, one or two upscale.";
   return `You are Arivia, a travel planner for people living in Armenia.
-List 6 to 8 good hotels in "${destination}" for ${guests} guest(s), staying ${checkIn} to ${checkOut}.
+List 6 good hotels in "${destination}" for ${guests} guest(s), staying ${checkIn} to ${checkOut}.
 
 Rules:
 - Only real, well-known hotels that exist today, with their exact official names, so they can be found on Booking.com.
@@ -55,7 +55,7 @@ function isHotels(value: unknown): value is { hotels: HotelOption[] } {
 }
 
 export async function generateGeminiHotels(request: HotelRequest, apiKey: string): Promise<HotelOption[]> {
-  const result = await callGeminiJson(prompt(request), HOTELS_SCHEMA, apiKey);
+  const result = await callGeminiJson(prompt(request), HOTELS_SCHEMA, apiKey, { quick: true });
   if (!isHotels(result) || result.hotels.length === 0) throw new Error("Gemini returned unexpected hotels");
   return result.hotels.map((h) => ({ ...h, stars: Math.min(Math.max(Math.round(h.stars), 1), 5) }));
 }
