@@ -1,6 +1,6 @@
 # Arivia
 
-A trip planner for Armenian travellers (main color trip.com-style blue `#3264FF`, line icons from lucide-react): plan a trip from start to finish, with budgets in AMD. The site is in English for now; the Armenian texts are kept in `src/lib/dictionaries.ts` (switch back with `SITE_LANG` in `src/lib/i18n.tsx`).
+A trip planner for Armenian travellers (main color trip.com-style blue `#3264FF`, line icons from lucide-react): plan a trip from start to finish, with budgets in AMD. The site is in English and Armenian: an EN / ՀՅ switch in the header changes the language (English by default, the choice is remembered in the browser), and AI answers come back in the chosen language. All texts are in `src/lib/dictionaries.ts`.
 
 This first version has no accounts, so anyone can open every page:
 

@@ -29,7 +29,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <Header />
           <div className="flex flex-1">
             {/* Options on the left, like trip.com */}
-            <aside className="sticky top-[61px] hidden self-start h-[calc(100vh-61px)] w-60 shrink-0 overflow-y-auto border-r border-line bg-surface p-3 lg:block">
+            <aside className="sticky top-[61px] hidden self-start h-[calc(100vh-61px)] w-64 shrink-0 overflow-y-auto border-r border-line bg-surface p-3 lg:block">
               <OptionsBar vertical />
             </aside>
             <main className="flex min-w-0 flex-1 flex-col">{children}</main>
